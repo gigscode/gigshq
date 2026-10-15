@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'SoloGTM — Your personal growth engine',
+  title: 'GigsHq — Your personal growth engine',
   description: 'AI-powered job discovery, pitch generation, and outbound tracking for independent creators.',
   generator: 'v0.app',
   icons: {

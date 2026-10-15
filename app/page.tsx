@@ -54,7 +54,7 @@ function Sidebar({ active, setActive }: { active: string; setActive: (key: strin
     <p className="mb-5 mt-12 px-3 text-[10px] font-semibold uppercase tracking-[.18em] text-violet-300">Workspace</p>
     <nav className="flex flex-col gap-1.5">{nav.map(({ label, icon: Icon, key }) => <button key={key} onClick={() => setActive(key)} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-left text-[13px] transition ${active === key ? 'bg-white font-semibold text-[#32177d] shadow-lg shadow-violet-950/20' : 'text-violet-100/75 hover:bg-white/10 hover:text-white'}`}><Icon className="size-[17px]" />{label}</button>)}</nav>
     <div className="mt-auto rounded-2xl border border-violet-400/20 bg-violet-950/30 p-4"><div className="mb-3 flex items-center justify-between"><span className="text-[11px] font-medium text-violet-200">PROFILE CONTEXT</span><Check className="size-4 text-emerald-300" /></div><p className="text-sm font-medium">Developer & Creator</p><p className="mt-1 text-xs leading-5 text-violet-200/60">Full-stack engineer, designer & content strategist</p><a href="https://jdev-vercel.app" className="mt-4 flex items-center gap-1 text-xs font-medium text-violet-200 hover:text-white">View portfolio <ArrowUpRight className="size-3" /></a></div>
-    <p className="mt-5 px-3 text-[10px] text-violet-300/50">SoloGTM OS · v1.0</p>
+    <p className="mt-5 px-3 text-[10px] text-violet-300/50">GigsHq · v1.0</p>
   </aside>
 }
 
