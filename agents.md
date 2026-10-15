@@ -22,7 +22,7 @@
    - Scrape and filter relevant web3 and non-web3 tech gigs, jobs, and freelance vacancies targeted at developers and creators across Africa and global remote markets.
    - Target positions matching full-stack development, Next.js, Supabase, email design, Figma UI design, copywriting, content strategy, AI content generation, and UGC creation.
 2. Design & Output Generation:
-   - Ensure all layouts, mockups, and interface recommendations align with a clean, dark-mode Vercel and Linear aesthetic.
+   - Ensure all layouts, mockups, and interface recommendations align with a clean, light-only Vercel and Linear aesthetic. Do not add dark-mode backgrounds.
    - Deliver clear, production-ready code blocks and actionable implementation steps without filler text.
 
 ## Implementation Guardrails
