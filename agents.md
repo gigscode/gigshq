@@ -47,6 +47,12 @@
 - Email outbound tracking and analytics
 - Settings and profile context
 
+## Personal Use & Service Budget
+- gigshq is a personal job-search tool for one user, intended to help its owner find work. Do not build team, multi-tenant, collaboration, invitation, or shared-workspace features unless explicitly requested.
+- Keep service costs at $0 by using free tiers only. Avoid paid plans, usage-based upgrades, and infrastructure that can incur charges without explicit approval. Check current provider limits before relying on free-tier behavior.
+- Supabase may be used within its current free tier. Installing an SDK does not mean a Supabase project, database, authentication, or persistence is configured. Do not claim the integration is live until credentials, schema, access policies, and runtime behavior have been verified.
+- Keep the interface focused on one person’s job search: finding relevant roles, organizing leads, preparing applications, and tracking outreach.
+
 When a feature depends on external data or delivery, replace mock behavior with a verified backend integration rather than silently extending the prototype with fabricated results.
 
 ## Review Notes
