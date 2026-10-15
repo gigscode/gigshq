@@ -291,7 +291,7 @@ export function Dashboard({
       <aside className="hidden w-[264px] shrink-0 flex-col border-r border-slate-200 bg-white px-5 py-6 lg:flex">
         <div className="flex items-center gap-3 px-2">
           <Image src="/gigshqicon.png" alt="" width={40} height={40} className="rounded-xl" />
-          <span className="text-xl font-semibold tracking-tight">gigs<span className="text-violet-700">hq</span></span>
+          <span className="text-2xl font-bold tracking-tight">gigs<span className="text-violet-700">hq</span></span>
         </div>
         <p className="mb-3 mt-10 px-3 text-[11px] font-semibold uppercase tracking-[.12em] text-slate-400">Your workspace</p>
         <nav aria-label="Main navigation" className="flex flex-col gap-1">
@@ -312,7 +312,7 @@ export function Dashboard({
         <header className="flex min-h-[88px] items-center justify-between gap-3 border-b border-slate-200 bg-white px-5 sm:px-8">
           <div className="min-w-0">
             <p className="text-xs font-medium text-slate-500">Personal job-search workspace</p>
-            <h1 className="mt-1 truncate text-xl font-semibold tracking-tight text-slate-950 sm:text-2xl">{title}</h1>
+            <h1 className="mt-1 truncate text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">{title}</h1>
           </div>
           <div className="flex shrink-0 items-center gap-2">
             <span className="hidden max-w-48 truncate text-xs text-slate-500 sm:block">{userEmail}</span>
@@ -341,7 +341,7 @@ export function Dashboard({
                 <section className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:p-6">
                   <div>
                     <div className="flex items-center gap-2"><span className="size-2 rounded-full bg-emerald-500" /><p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Your saved opportunities</p></div>
-                    <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">Add roles you find and track each application from one place. These records are saved to your Supabase account.</p>
+                    <p className="mt-2 max-w-2xl text-base font-medium leading-7 text-slate-600">Add roles you find and track each application from one place. These records are saved to your Supabase account.</p>
                   </div>
                   <Button className="w-full sm:w-auto" onClick={() => { setEditing(undefined); setShowForm((value) => !value) }}><Plus aria-hidden="true" data-icon="inline-start" />Add opportunity</Button>
                 </section>
@@ -363,7 +363,7 @@ export function Dashboard({
                   </div>
                 </section>
                 <div className="flex items-end justify-between gap-3">
-                  <div><h2 className="text-base font-semibold text-slate-950">{filtered.length} {filtered.length === 1 ? 'opportunity' : 'opportunities'}</h2><p className="mt-1 text-sm text-slate-500">Private to your signed-in account.</p></div>
+                  <div><h2 className="text-xl font-bold text-slate-950">{filtered.length} {filtered.length === 1 ? 'opportunity' : 'opportunities'}</h2><p className="mt-1 text-base text-slate-600">Private to your signed-in account.</p></div>
                 </div>
                 {filtered.length ? (
                   <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -373,7 +373,7 @@ export function Dashboard({
                         <Card key={opportunity.id} className="overflow-hidden border-slate-200 bg-white shadow-sm">
                           <CardContent className="p-5">
                             <div className="flex items-start justify-between gap-3">
-                              <div className="min-w-0"><p className="text-xs font-medium text-slate-500">{opportunity.company_name}</p><h3 className="mt-1 text-[15px] font-semibold leading-5 text-slate-950">{opportunity.title}</h3></div>
+                              <div className="min-w-0"><p className="text-sm font-semibold text-slate-600">{opportunity.company_name}</p><h3 className="mt-1 text-lg font-bold leading-6 text-slate-950">{opportunity.title}</h3></div>
                               <Badge variant="outline" className="shrink-0 capitalize">{opportunity.status}</Badge>
                             </div>
                             {opportunity.description && <p className="mt-4 line-clamp-3 whitespace-pre-wrap text-sm leading-6 text-slate-600">{opportunity.description}</p>}
