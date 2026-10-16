@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { ProfileDocuments } from '@/components/profile-documents'
+import { PitchGenerator } from '@/components/pitch-generator'
 import { createClient } from '@/lib/supabase/client'
 
 export type Opportunity = {
@@ -407,6 +408,8 @@ export function Dashboard({
                   </div>
                 )}
               </>
+            ) : active === 'pitch' ? (
+              <PitchGenerator opportunities={opportunities} />
             ) : active === 'settings' ? (
               <>
                 <ProfileDocuments userId={userId} />
