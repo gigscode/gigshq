@@ -16,13 +16,14 @@ This is not a multi-tenant SaaS product. Do not add team, invitation, collaborat
 
 ## Current product areas
 
-The dashboard navigation contains:
+The dashboard is focused on discovering roles first. Its navigation contains:
 
-1. **Opportunities & Leads**: Add, edit, search, filter, update status, and delete opportunities. Records are intended to live in the signed-in user's Supabase account. Fields include company, title, description, source, contact, compensation, and status.
-2. **Campaigns & Ingestion**: Navigation exists, but campaign ingestion is not connected.
-3. **AI Pitch Generator**: Implemented as a review-only draft tool using OpenRouter's `nvidia/nemotron-3.5-lightning:free` model. It accepts one saved opportunity and a selected PDF, DOCX, or TXT CV, extracts CV text on the server, and returns an editable pitch draft in the browser. It does not persist or send the draft. Runtime behavior still needs verification with a signed-in account, a configured `OPENROUTER_API_KEY`, an opportunity, and a supported CV.
-4. **Email Outbound Tracker**: Navigation exists, but email sending and outreach tracking are not connected.
-5. **Settings / Profile Context**: Includes account details and three private career-document categories:
+1. **Job discovery**: Reads Jobicy's public remote-jobs API through an authenticated server route, displays up to 200 recent listings, provides client-side keyword/category filtering against the owner's skills, and sorts likely matches by keyword evidence. These are transparent keyword matches, not AI fit scores. Listings show Jobicy attribution and link to the original Jobicy listing for application. The public API documentation says it returns jobs from the last 7 days. Feed retrieval is cached for up to 6 hours.
+2. **Opportunities & Leads**: Add, edit, search, filter, update status, and delete opportunities. Saved Jobicy listings are added to the signed-in user's Supabase account, with their Jobicy source URL retained.
+3. **Campaigns & Ingestion**: Navigation exists, but campaign management and ingestion workflows are not connected.
+4. **AI Pitch Generator**: A review-only draft tool using OpenRouter's `nvidia/nemotron-3.5-lightning:free` model. It accepts one saved opportunity and a selected PDF, DOCX, or TXT CV, extracts CV text on the server, and returns an editable pitch draft in the browser. It does not persist or send the draft. Runtime behavior still needs verification with a signed-in account, configured `OPENROUTER_API_KEY`, an opportunity, and a supported CV.
+5. **Email Outbound Tracker**: Navigation exists, but email sending and outreach tracking are not connected.
+6. **Settings / Profile Context**: Includes account details and three private career-document categories:
    - Master CV
    - Social media & content writer CV
    - WordPress CV
@@ -39,12 +40,13 @@ The owner reports that the Supabase Storage SQL setup ran successfully. The setu
 - Supabase authentication gates the dashboard. Unauthenticated visitors are redirected to sign-in.
 - Supabase client and server helpers are configured in `lib/supabase/`.
 - Opportunity records are read and managed through the `opportunities` table.
+- Job discovery uses Jobicy's public API (`https://jobicy.com/api/v2/remote-jobs`) from `app/api/jobs/jobicy/route.ts`. The route requires an authenticated session and caches upstream requests for 6 hours. The UI credits Jobicy and sends application clicks to the source listing.
 - Career documents use Supabase Storage with owner-folder access policies in the migration above.
 - Mobile navigation and responsive dashboard layouts are present.
 
 ### Not connected yet
 
-- No live job-board API, automated scraping, scheduled ingestion, or deduplication workflow.
+- Jobicy is the only connected job source. The app does not yet aggregate multiple boards, include local/on-site African roles, or run scheduled ingestion. Feed results are not persisted until the user saves an individual role as a lead.
 - The pitch generator calls OpenRouter from `app/api/ai/pitch/route.ts`. It requires `OPENROUTER_API_KEY` in local and deployed server environments. The selected CV and opportunity details are sent to OpenRouter and its model provider for generation, as disclosed in the UI.
 - The current model ID has the `:free` variant. Availability and provider limits can change; check current OpenRouter model pricing/limits before relying on free service. Do not add credits or paid usage without explicit approval.
 - The server can extract text from PDF, DOCX, and TXT files for a pitch. DOC files can be stored but cannot currently be parsed for generation.
@@ -80,7 +82,7 @@ If AI generation is implemented:
 
 The two-week goal favors useful, low-friction work over building a broad automation platform. Prioritize:
 
-1. Confirm the owner can sign in and upload each of the three CV types.
-2. Make manual opportunity entry and status tracking reliable.
-3. Add AI-assisted, editable application or outreach drafts once an API key is configured, keeping the provider integration free-only and server-side.
-4. Keep job discovery and outreach honest and human-reviewed until live sources and email delivery are explicitly implemented.
+1. Verify the Jobicy feed, profile keyword filtering, source attribution, apply links, and saving a listing into the user's opportunity pipeline.
+2. Add further job sources only after verifying their access methods, free limits, terms, and attribution rules. The target includes local African, global remote, freelance, and contract work; Jobicy alone is not sufficient coverage.
+3. Keep AI-assisted application drafts secondary to job discovery, free-only, editable, truthful, and human-reviewed.
+4. Do not automate email sending or claim listings are current without checking the source page.

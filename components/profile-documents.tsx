@@ -179,7 +179,7 @@ export function ProfileDocuments({ userId }: { userId: string }) {
         <h2 id="profile-documents-heading" className="mt-1 text-xl font-bold text-slate-950">Your CVs and work profiles</h2>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
           Keep a separate source document for each kind of work you are pursuing. Files are private to your account.
-          They are not sent to an AI service or used to generate pitches yet.
+          A CV is sent to the AI provider only if you select it in the pitch generator.
         </p>
       </div>
 

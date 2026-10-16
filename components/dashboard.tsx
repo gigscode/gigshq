@@ -13,6 +13,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { ProfileDocuments } from '@/components/profile-documents'
 import { PitchGenerator } from '@/components/pitch-generator'
+import { JobDiscovery } from '@/components/job-discovery'
 import { createClient } from '@/lib/supabase/client'
 
 export type Opportunity = {
@@ -30,7 +31,7 @@ export type Opportunity = {
   created_at: string
 }
 
-type OpportunityFormValues = {
+export type OpportunityFormValues = {
   company_name: string
   title: string
   description: string | null
@@ -44,6 +45,7 @@ type OpportunityFormValues = {
 const opportunityFields = 'id, company_name, title, description, source_name, source_url, contact_name, contact_email, compensation, fit_score, status, created_at'
 const statuses = ['new', 'saved', 'applied', 'archived']
 const navItems = [
+  { label: 'Job discovery', key: 'discovery', icon: Search },
   { label: 'Opportunities & Leads', key: 'opportunities', icon: Target },
   { label: 'Campaigns & Ingestion', key: 'campaigns', icon: FolderKanban },
   { label: 'AI Pitch Generator', key: 'pitch', icon: BriefcaseBusiness },
@@ -170,7 +172,7 @@ export function Dashboard({
 }) {
   const router = useRouter()
   const [opportunities, setOpportunities] = useState(initialOpportunities)
-  const [active, setActive] = useState('opportunities')
+  const [active, setActive] = useState('discovery')
   const [menuOpen, setMenuOpen] = useState(false)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<Opportunity>()
@@ -338,7 +340,12 @@ export function Dashboard({
         <main className="flex-1 px-5 py-7 sm:px-8 lg:px-10">
           <div className="mx-auto flex max-w-[1440px] flex-col gap-6">
             {dataError && <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">Supabase returned an error: {dataError}</div>}
-            {active === 'opportunities' ? (
+            {active === 'discovery' ? (
+              <JobDiscovery
+                savedSourceUrls={opportunities.flatMap((opportunity) => opportunity.source_url ? [opportunity.source_url] : [])}
+                onSave={saveOpportunity}
+              />
+            ) : active === 'opportunities' ? (
               <>
                 <section className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:p-6">
                   <div>
