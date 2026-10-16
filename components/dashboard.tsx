@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { ProfileDocuments } from '@/components/profile-documents'
 import { createClient } from '@/lib/supabase/client'
 
 export type Opportunity = {
@@ -407,7 +408,10 @@ export function Dashboard({
                 )}
               </>
             ) : active === 'settings' ? (
-              <Card className="border-slate-200 bg-white shadow-sm"><CardContent className="p-6"><h2 className="font-semibold text-slate-950">Account</h2><p className="mt-2 text-sm text-slate-600">Signed in as {userEmail}</p><Button variant="outline" className="mt-5" onClick={signOut}><LogOut aria-hidden="true" data-icon="inline-start" />Sign out</Button></CardContent></Card>
+              <>
+                <ProfileDocuments userId={userId} />
+                <Card className="border-slate-200 bg-white shadow-sm"><CardContent className="p-6"><h2 className="font-semibold text-slate-950">Account</h2><p className="mt-2 text-sm text-slate-600">Signed in as {userEmail}</p><Button variant="outline" className="mt-5" onClick={signOut}><LogOut aria-hidden="true" data-icon="inline-start" />Sign out</Button></CardContent></Card>
+              </>
             ) : (
               <Card className="border-slate-200 bg-white shadow-sm"><CardContent className="flex min-h-72 flex-col items-center justify-center px-6 text-center"><div className="mb-4 rounded-xl border border-slate-200 bg-slate-50 p-3 text-violet-800"><BriefcaseBusiness aria-hidden="true" className="size-6" /></div><h2 className="text-lg font-semibold text-slate-950">{title}</h2><p className="mt-2 max-w-sm text-sm leading-6 text-slate-600">This section is not connected yet. No campaigns, AI service, email delivery, or outreach data are being generated or stored here.</p></CardContent></Card>
             )}

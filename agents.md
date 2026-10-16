@@ -37,7 +37,7 @@
 ## Current Profile Context
 - Core role: Full-Stack Engineer, UI/UX Designer & Content Strategist
 - Skills: Next.js, Supabase, Email Design, Figma Design, Copywriting, Content Strategy, AI Content & UGC Creation, Web3/Web2 integration, WordPress development, Shopify
-- Portfolio: https://jdev-vercel.app
+- Portfolio: https://jdev-live.vercel.app
 - Target markets: Africa and global remote opportunities
 
 ## Current Product Scope
