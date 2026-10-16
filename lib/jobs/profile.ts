@@ -137,7 +137,7 @@ const searchLanes: SearchLane[] = [
       'lifecycle marketing',
       'abandoned cart automation', 'welcome flow setup',
       'customer retention automation', 'email deliverability',
-      'esp migration', 'email template development',
+      'esp migration', 'email template development', 'email marketing',
     ],
   },
   {
@@ -188,6 +188,7 @@ const searchLanes: SearchLane[] = [
       'woocommerce product upload', 'wordpress seo', 'wordpress to next js',
       'conversion focused landing pages',
       'ecommerce', 'e commerce', 'website performance',
+      'website',
     ],
   },
   {
@@ -297,6 +298,7 @@ export function getTargetJobCategories(
 
   if (
     containsPhrase(normalizedTitle, 'shopify')
+    || /\.net\b/i.test(title)
     || (containsPhrase(normalizedTitle, 'software engineer') && !titleHasSpecificWebRole)
   ) {
     return []
@@ -308,7 +310,6 @@ export function getTargetJobCategories(
       const roleMatches = hasAnyPhrase(normalizedTitle, lane.titleRolePhrases)
         || (titleHasRoleWord && hasAnyPhrase(normalizedIntro, lane.detailRolePhrases))
       const skillMatches = hasAnyPhrase(combinedText, lane.skillPhrases)
-        || hasAnyPhrase(normalizedTitle, lane.titleRolePhrases)
       return roleMatches && skillMatches
     })
     .map((lane) => lane.id)

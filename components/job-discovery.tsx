@@ -20,7 +20,7 @@ type RemoteJob = {
   excerpt: string
   salary: string | null
   publishedAt: string | null
-  sourceName: 'Jobicy' | 'Remote OK'
+  sourceName: 'Jobicy' | 'Remote OK' | 'Remotive'
   targetCategories: TargetJobCategory[]
 }
 
@@ -311,7 +311,7 @@ export function JobDiscovery({
       )}
 
       <p className="text-xs leading-5 text-slate-500">
-        Listings and application links: <a href="https://jobicy.com" target="_blank" rel="noreferrer" className="font-medium text-violet-800 underline underline-offset-2">Jobicy</a> and <a href="https://remoteok.com" target="_blank" rel="noreferrer" className="font-medium text-violet-800 underline underline-offset-2">Remote OK</a>. Feed responses are cached for up to 6 hours. Check the source listing for current status and application details.
+        Listings and application links: <a href="https://jobicy.com" target="_blank" rel="noreferrer" className="font-medium text-violet-800 underline underline-offset-2">Jobicy</a>, <a href="https://remoteok.com" target="_blank" rel="noreferrer" className="font-medium text-violet-800 underline underline-offset-2">Remote OK</a>, and <a href="https://remotive.com" target="_blank" rel="noreferrer" className="font-medium text-violet-800 underline underline-offset-2">Remotive</a>. Remotive listings may be delayed by 24 hours. Feed responses are cached for up to 6 hours. Check the source listing for current status and application details.
       </p>
     </div>
   )
