@@ -20,7 +20,7 @@ type RemoteJob = {
   excerpt: string
   salary: string | null
   publishedAt: string | null
-  sourceName: 'Jobicy' | 'Remote OK' | 'Remotive'
+  sourceName: 'Jobicy' | 'Remote OK' | 'Remotive' | 'Freehire'
   targetCategories: TargetJobCategory[]
 }
 
@@ -266,6 +266,7 @@ export function JobDiscovery({
                     <Badge variant="secondary">{job.location}</Badge>
                     {job.types.slice(0, 2).map((type) => <Badge key={type} variant="outline">{type}</Badge>)}
                     {job.industries.slice(0, 2).map((industry) => <Badge key={industry} variant="outline">{industry}</Badge>)}
+                    {job.sourceName === 'Freehire' && <Badge variant="outline">Freehire source</Badge>}
                   </div>
 
                   {job.excerpt && <p className="mt-4 line-clamp-4 text-sm leading-6 text-slate-600">{plainText(job.excerpt)}</p>}
@@ -273,7 +274,7 @@ export function JobDiscovery({
 
                   <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-slate-100 pt-4">
                     <a href={job.url} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-1 rounded-lg bg-violet-800 px-3 text-sm font-medium text-white hover:bg-violet-900">
-                      View & apply on {job.sourceName} <ArrowUpRight aria-hidden="true" className="size-4" />
+                      {job.sourceName === 'Freehire' ? 'View original posting' : `View & apply on ${job.sourceName}`} <ArrowUpRight aria-hidden="true" className="size-4" />
                     </a>
                     <Button
                       type="button"
@@ -311,7 +312,7 @@ export function JobDiscovery({
       )}
 
       <p className="text-xs leading-5 text-slate-500">
-        Listings and application links: <a href="https://jobicy.com" target="_blank" rel="noreferrer" className="font-medium text-violet-800 underline underline-offset-2">Jobicy</a>, <a href="https://remoteok.com" target="_blank" rel="noreferrer" className="font-medium text-violet-800 underline underline-offset-2">Remote OK</a>, and <a href="https://remotive.com" target="_blank" rel="noreferrer" className="font-medium text-violet-800 underline underline-offset-2">Remotive</a>. Remotive listings may be delayed by 24 hours. Feed responses are cached for up to 6 hours. Check the source listing for current status and application details.
+        Listings and application links: <a href="https://jobicy.com" target="_blank" rel="noreferrer" className="font-medium text-violet-800 underline underline-offset-2">Jobicy</a>, <a href="https://remoteok.com" target="_blank" rel="noreferrer" className="font-medium text-violet-800 underline underline-offset-2">Remote OK</a>, <a href="https://remotive.com" target="_blank" rel="noreferrer" className="font-medium text-violet-800 underline underline-offset-2">Remotive</a>, and <a href="https://freehire.me" target="_blank" rel="noreferrer" className="font-medium text-violet-800 underline underline-offset-2">Freehire</a>. Remotive listings may be delayed by 24 hours. Feed responses are cached for up to 6 hours. Check the source listing for current status and application details.
       </p>
     </div>
   )
