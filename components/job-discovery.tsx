@@ -67,6 +67,14 @@ function formatDate(value: string) {
     : new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(date)
 }
 
+function formatPostedDate(value: string | null) {
+  if (!value) return null
+  const date = new Date(value)
+  return Number.isNaN(date.getTime())
+    ? null
+    : new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(date)
+}
+
 function plainText(value: string) {
   return value
     .replace(/<[^>]*>/g, ' ')
@@ -247,6 +255,7 @@ export function JobDiscovery({
         <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
           {filteredJobs.map(({ job, categories }) => {
             const saved = savedUrls.has(job.url)
+            const postedDate = formatPostedDate(job.publishedAt)
             return (
               <Card key={job.id} className="border-slate-200 bg-white shadow-sm">
                 <CardContent className="flex h-full flex-col p-5">
@@ -268,6 +277,13 @@ export function JobDiscovery({
                     {job.industries.slice(0, 2).map((industry) => <Badge key={industry} variant="outline">{industry}</Badge>)}
                     {job.sourceName === 'Freehire' && <Badge variant="outline">Freehire source</Badge>}
                   </div>
+
+                  <p className="mt-3 flex items-center gap-1.5 text-xs text-slate-500">
+                    <Clock3 aria-hidden="true" className="size-3.5 shrink-0" />
+                    {postedDate
+                      ? <><span>Posted </span><time dateTime={job.publishedAt ?? undefined}>{postedDate}</time></>
+                      : 'Posting date unavailable'}
+                  </p>
 
                   {job.excerpt && <p className="mt-4 line-clamp-4 text-sm leading-6 text-slate-600">{plainText(job.excerpt)}</p>}
                   {job.salary && <p className="mt-3 text-sm font-medium text-slate-800">Listed compensation: {job.salary}</p>}
