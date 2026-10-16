@@ -9,17 +9,18 @@ This is not a multi-tenant SaaS product. Do not add team, invitation, collaborat
 ## Owner profile and target work
 
 - Core positioning: Full-Stack Engineer, UI/UX Designer, and Content Strategist.
-- Skills include Next.js, Supabase, WordPress, Shopify, Figma, email design, copywriting, content strategy, AI-assisted content, UGC, and Web2/Web3 integration.
+- Priority searches: Full-stack and frontend development (React, Next.js, TypeScript, Supabase, Tailwind CSS, Figma-to-code); AI/API and business-workflow integration; email design/copywriting and Klaviyo flows; WordPress/WooCommerce development and maintenance; landing-page and marketing design; specialist website, landing-page, email, and technical writing.
+- Search terms are not proof of experience. Do not claim Klaviyo, Shopify, AI-generated UGC, social-account management, logo design, or other unverified capabilities in applications without evidence from the owner's portfolio or confirmation.
 - Portfolio: https://jdev-live.vercel.app
 - Target markets: African opportunities and global remote work.
-- Relevant opportunity types include full-stack and frontend development, WordPress/Shopify projects, UI/UX and Figma design, email design, copywriting, content strategy, AI content, UGC, and Web3/Web2 work.
+- Active discovery follows the six priority search lanes below. Shopify, AI-generated UGC, social-media account management, logo-only work, and broad Web3/software roles are not active searches without owner confirmation or portfolio evidence.
 
 ## Current product areas
 
 The dashboard is focused on discovering roles first. Its navigation contains:
 
-1. **Job discovery**: Reads Jobicy's public remote-jobs API through an authenticated server route, displays up to 200 recent listings, provides client-side keyword/category filtering against the owner's skills, and sorts likely matches by keyword evidence. These are transparent keyword matches, not AI fit scores. Listings show Jobicy attribution and link to the original Jobicy listing for application. The public API documentation says it returns jobs from the last 7 days. Feed retrieval is cached for up to 6 hours.
-2. **Opportunities & Leads**: Add, edit, search, filter, update status, and delete opportunities. Saved Jobicy listings are added to the signed-in user's Supabase account, with their Jobicy source URL retained.
+1. **Job discovery**: Reads Jobicy and Remote OK public remote-job feeds through an authenticated server route. The initial view combines the latest Remote OK feed with up to 200 Jobicy listings, and a cursor-based “Load more” requests further Jobicy pages. The server filters feed results against six target-work lanes: full-stack/frontend, AI/business automation, email/Klaviyo, websites/WooCommerce, design/landing pages, and specialist writing. A general “Software Engineer” title is not enough to qualify. Full-stack/frontend titles also need a matching React, Next.js, TypeScript, Supabase, Tailwind, Figma-to-code, or responsive-UI signal in the title or job details. This is a keyword rule, not an AI fit score or proof the owner meets every requirement. Results are de-duplicated by source URL, cached upstream for up to 6 hours, and link to their original source. Location filters are heuristics; verify eligibility and listing availability on the original page.
+2. **Opportunities & Leads**: Add, edit, search, filter, update status, and delete opportunities. Saved Jobicy and Remote OK listings are added to the signed-in user's Supabase account, with their source name and URL retained.
 3. **Campaigns & Ingestion**: Navigation exists, but campaign management and ingestion workflows are not connected.
 4. **AI Pitch Generator**: A review-only draft tool using OpenRouter's `nvidia/nemotron-3.5-lightning:free` model. It accepts one saved opportunity and a selected PDF, DOCX, or TXT CV, extracts CV text on the server, and returns an editable pitch draft in the browser. It does not persist or send the draft. Runtime behavior still needs verification with a signed-in account, configured `OPENROUTER_API_KEY`, an opportunity, and a supported CV.
 5. **Email Outbound Tracker**: Navigation exists, but email sending and outreach tracking are not connected.
@@ -40,13 +41,14 @@ The owner reports that the Supabase Storage SQL setup ran successfully. The setu
 - Supabase authentication gates the dashboard. Unauthenticated visitors are redirected to sign-in.
 - Supabase client and server helpers are configured in `lib/supabase/`.
 - Opportunity records are read and managed through the `opportunities` table.
-- Job discovery uses Jobicy's public API (`https://jobicy.com/api/v2/remote-jobs`) from `app/api/jobs/jobicy/route.ts`. The route requires an authenticated session and caches upstream requests for 6 hours. The UI credits Jobicy and sends application clicks to the source listing.
+- Job discovery uses Jobicy's public API (`https://jobicy.com/api/v2/remote-jobs`) and Remote OK's public feed (`https://remoteok.com/api`) from `app/api/jobs/route.ts`. The route requires an authenticated session, fetches sources concurrently on initial load, reports partial source failures, and paginates Jobicy with its cursor on request. Upstream requests are cached for 6 hours. The UI credits both sources and sends application clicks to the original listing.
 - Career documents use Supabase Storage with owner-folder access policies in the migration above.
 - Mobile navigation and responsive dashboard layouts are present.
 
 ### Not connected yet
 
-- Jobicy is the only connected job source. The app does not yet aggregate multiple boards, include local/on-site African roles, or run scheduled ingestion. Feed results are not persisted until the user saves an individual role as a lead.
+- Jobicy and Remote OK are the only connected job sources, and both focus on remote roles. The app does not yet include local/on-site African roles, freelance marketplaces, or scheduled ingestion. Jobicy pagination is user-triggered. Feed results are not persisted until the user saves an individual role as a lead. These two sources are not comprehensive enough to claim broad African-market coverage.
+- The target-role rules use simple title phrases and can miss good roles with unusual titles. They can also return a role that requires skills the owner does not have. General “Software Engineer” roles are excluded unless a specific web specialization appears in the title. Shopify, AI UGC, social-media account management, and logo-only roles are not active searches pending evidence or confirmation. Shopify is explicitly blocked from the current role matcher.
 - The pitch generator calls OpenRouter from `app/api/ai/pitch/route.ts`. It requires `OPENROUTER_API_KEY` in local and deployed server environments. The selected CV and opportunity details are sent to OpenRouter and its model provider for generation, as disclosed in the UI.
 - The current model ID has the `:free` variant. Availability and provider limits can change; check current OpenRouter model pricing/limits before relying on free service. Do not add credits or paid usage without explicit approval.
 - The server can extract text from PDF, DOCX, and TXT files for a pitch. DOC files can be stored but cannot currently be parsed for generation.
@@ -82,7 +84,7 @@ If AI generation is implemented:
 
 The two-week goal favors useful, low-friction work over building a broad automation platform. Prioritize:
 
-1. Verify the Jobicy feed, profile keyword filtering, source attribution, apply links, and saving a listing into the user's opportunity pipeline.
-2. Add further job sources only after verifying their access methods, free limits, terms, and attribution rules. The target includes local African, global remote, freelance, and contract work; Jobicy alone is not sufficient coverage.
+1. Verify both feeds, Jobicy cursor pagination, profile keyword filtering, source attribution, apply links, partial-source error display, and saving a listing into the user's opportunity pipeline.
+2. Add further job sources only after verifying their access methods, free limits, terms, geographic coverage, freshness, and attribution rules. The target includes local African, global remote, freelance, and contract work; the two remote feeds are not sufficient coverage.
 3. Keep AI-assisted application drafts secondary to job discovery, free-only, editable, truthful, and human-reviewed.
 4. Do not automate email sending or claim listings are current without checking the source page.

@@ -19,8 +19,9 @@
 
 ## Operational Objectives
 1. Web Scraping & Ingestion:
-   - Scrape and filter relevant web3 and non-web3 tech gigs, jobs, and freelance vacancies targeted at developers and creators across Africa and global remote markets.
-   - Target positions matching full-stack development, Next.js, Supabase, email design, Figma UI design, copywriting, content strategy, AI content generation, and UGC creation.
+   - Find relevant remote jobs and projects across Africa and global markets, using permitted source APIs and feeds.
+   - Prioritize full-stack/frontend development, AI/API and business automation, email design and lifecycle work, WordPress/WooCommerce, landing-page and marketing design, and specialist copywriting/content roles.
+   - Filter out broad software-engineering roles unless the listing names a specific web specialization. Do not include Shopify, AI UGC, social-media account management, or logo-only work in active searches without portfolio evidence or owner confirmation.
 2. Design & Output Generation:
    - Ensure all layouts, mockups, and interface recommendations align with a clean, light-only Vercel and Linear aesthetic. Do not add dark-mode backgrounds.
    - Deliver clear, production-ready code blocks and actionable implementation steps without filler text.
@@ -36,7 +37,7 @@
 
 ## Current Profile Context
 - Core role: Full-Stack Engineer, UI/UX Designer & Content Strategist
-- Skills: Next.js, Supabase, Email Design, Figma Design, Copywriting, Content Strategy, AI Content & UGC Creation, Web3/Web2 integration, WordPress development, Shopify
+- Skills/search targets: React, Next.js, TypeScript, Supabase, Tailwind CSS, Figma-to-code, email design/copywriting, WordPress, WooCommerce, API/workflow integration, landing-page and marketing design, specialist content writing. A search match is not proof of capability; use only skills the owner can demonstrate in applications.
 - Portfolio: https://jdev-live.vercel.app
 - Target markets: Africa and global remote opportunities
 

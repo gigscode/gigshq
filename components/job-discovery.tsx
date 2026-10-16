@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import type { OpportunityFormValues } from '@/components/dashboard'
+import { getTargetJobCategories, jobCategories, targetJobCategories, type JobCategory } from '@/lib/jobs/profile'
 
 type RemoteJob = {
   id: string
@@ -18,56 +19,43 @@ type RemoteJob = {
   types: string[]
   excerpt: string
   salary: string | null
+  publishedAt: string | null
+  sourceName: 'Jobicy' | 'Remote OK'
 }
 
 type FeedResponse = {
   jobs: RemoteJob[]
   updatedAt: string
-  sourceName: string
-  sourceUrl: string
+  nextCursor: string | null
+  sourceErrors: string[]
   notice: string
 }
 
-type Category = 'all' | 'engineering' | 'design' | 'content'
+type Region = 'nigeria' | 'africa' | 'remote' | 'all'
 
-const profileTerms = [
-  'next.js', 'nextjs', 'react', 'typescript', 'javascript', 'frontend', 'front-end',
-  'full stack', 'full-stack', 'web developer', 'software engineer', 'supabase',
-  'wordpress', 'shopify', 'e-commerce', 'ecommerce', 'figma', 'ui/ux',
-  'product designer', 'ux designer', 'email design', 'email marketing',
-  'copywriter', 'copywriting', 'content writer', 'content strategist',
-  'content strategy', 'social media', 'creator', 'ugc', 'web3',
+const africanCountries = [
+  'algeria', 'angola', 'benin', 'botswana', 'burkina faso', 'burundi', 'cameroon',
+  'cape verde', 'central african republic', 'chad', 'comoros', 'congo', 'djibouti',
+  'dr congo', 'democratic republic of the congo', 'egypt', 'equatorial guinea',
+  'eritrea', 'eswatini', 'ethiopia', 'gabon', 'gambia', 'ghana', 'guinea',
+  'guinea-bissau', 'ivory coast', 'cote d’ivoire', 'kenya', 'lesotho', 'liberia',
+  'libya', 'madagascar', 'malawi', 'mali', 'mauritania', 'mauritius', 'morocco',
+  'mozambique', 'namibia', 'niger', 'nigeria', 'rwanda', 'senegal', 'seychelles',
+  'sierra leone', 'somalia', 'south africa', 'south sudan', 'sudan', 'tanzania',
+  'togo', 'tunisia', 'uganda', 'zambia', 'zimbabwe',
 ]
 
-const categories: { id: Category; label: string; terms: string[] }[] = [
-  { id: 'all', label: 'All profile matches', terms: profileTerms },
-  {
-    id: 'engineering',
-    label: 'Engineering & web',
-    terms: ['next.js', 'nextjs', 'react', 'typescript', 'javascript', 'frontend', 'front-end', 'full stack', 'full-stack', 'web developer', 'software engineer', 'supabase', 'wordpress', 'shopify', 'e-commerce', 'ecommerce'],
-  },
-  {
-    id: 'design',
-    label: 'Design',
-    terms: ['figma', 'ui/ux', 'product designer', 'ux designer', 'email design'],
-  },
-  {
-    id: 'content',
-    label: 'Content & marketing',
-    terms: ['email marketing', 'copywriter', 'copywriting', 'content writer', 'content strategist', 'content strategy', 'social media', 'creator', 'ugc', 'web3'],
-  },
-]
+function matchesRegion(job: RemoteJob, region: Region) {
+  if (region === 'all' || region === 'remote') return true
+  const location = job.location.toLowerCase()
+  const worldwide = /\b(worldwide|anywhere|global|all countries)\b/.test(location)
+  if (worldwide) return true
 
-function scoreJob(job: RemoteJob, terms: string[]) {
-  const title = job.title.toLowerCase()
-  const metadata = [...job.industries, ...job.types].join(' ').toLowerCase()
-  const excerpt = job.excerpt.toLowerCase()
-  return terms.reduce((score, term) => {
-    if (title.includes(term)) return score + 4
-    if (metadata.includes(term)) return score + 2
-    if (excerpt.includes(term)) return score + 1
-    return score
-  }, 0)
+  if (region === 'nigeria') {
+    return /\bnigeria\b|\bafrica\b|\blagos\b|\babuja\b|\bport harcourt\b|\bibadan\b|\bkano\b|\benugu\b|\bkaduna\b|\bbenin city\b/.test(location)
+  }
+
+  return /\bafrica\b/.test(location) || africanCountries.some((country) => location.includes(country))
 }
 
 function formatDate(value: string) {
@@ -101,19 +89,23 @@ export function JobDiscovery({
 }) {
   const [jobs, setJobs] = useState<RemoteJob[]>([])
   const [updatedAt, setUpdatedAt] = useState('')
+  const [nextCursor, setNextCursor] = useState<string | null>(null)
+  const [sourceErrors, setSourceErrors] = useState<string[]>([])
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
   const [savingUrl, setSavingUrl] = useState('')
   const [query, setQuery] = useState('')
-  const [category, setCategory] = useState<Category>('all')
-  const [showAll, setShowAll] = useState(false)
+  const [category, setCategory] = useState<JobCategory>('all')
+  const [region, setRegion] = useState<Region>('nigeria')
   const savedUrls = useMemo(() => new Set(savedSourceUrls), [savedSourceUrls])
 
-  async function loadJobs() {
-    setLoading(true)
+  async function loadJobs(cursor?: string, append = false) {
+    if (append) setLoadingMore(true)
+    else setLoading(true)
     setError('')
     try {
-      const response = await fetch('/api/jobs/jobicy')
+      const response = await fetch(cursor ? `/api/jobs?cursor=${encodeURIComponent(cursor)}` : '/api/jobs')
       const payload: unknown = await response.json()
       if (!response.ok) {
         const message = payload && typeof payload === 'object' && 'error' in payload && typeof payload.error === 'string'
@@ -126,12 +118,18 @@ export function JobDiscovery({
         throw new Error('The job feed returned an unexpected response.')
       }
       const result = payload as FeedResponse
-      setJobs(result.jobs)
+      setJobs((current) => {
+        const combined = append ? [...current, ...result.jobs] : result.jobs
+        return Array.from(new Map(combined.map((job) => [job.url, job])).values())
+      })
       setUpdatedAt(result.updatedAt)
+      setNextCursor(result.nextCursor)
+      setSourceErrors((current) => append ? [...new Set([...current, ...result.sourceErrors])] : result.sourceErrors)
     } catch (caughtError) {
       setError(caughtError instanceof Error ? caughtError.message : 'Could not load remote jobs.')
     } finally {
       setLoading(false)
+      setLoadingMore(false)
     }
   }
 
@@ -139,13 +137,17 @@ export function JobDiscovery({
     void loadJobs()
   }, [])
 
-  const terms = categories.find((item) => item.id === category)?.terms ?? profileTerms
   const filteredJobs = useMemo(() => jobs
-    .map((job) => ({ job, score: scoreJob(job, terms) }))
-    .filter(({ job, score }) => (showAll || score > 0)
+    .map((job) => ({
+      job,
+      categories: getTargetJobCategories(job.title, job.excerpt, [...job.industries, ...job.types]),
+    }))
+    .filter(({ categories }) => category === 'all' || categories.includes(category))
+    .filter(({ job }) => matchesRegion(job, region)
       && `${job.title} ${job.company} ${job.location} ${job.industries.join(' ')} ${job.types.join(' ')} ${job.excerpt}`.toLowerCase().includes(query.trim().toLowerCase()))
-    .sort((left, right) => right.score - left.score || left.job.title.localeCompare(right.job.title)),
-  [jobs, terms, showAll, query])
+    .sort((left, right) => (Date.parse(right.job.publishedAt ?? '') || 0) - (Date.parse(left.job.publishedAt ?? '') || 0)
+      || left.job.title.localeCompare(right.job.title)),
+  [jobs, category, query, region])
 
   async function saveJob(job: RemoteJob) {
     setSavingUrl(job.url)
@@ -154,7 +156,7 @@ export function JobDiscovery({
       company_name: job.company,
       title: job.title,
       description: plainText(job.excerpt) || null,
-      source_name: 'Jobicy',
+      source_name: job.sourceName,
       source_url: job.url,
       contact_name: null,
       contact_email: null,
@@ -170,11 +172,17 @@ export function JobDiscovery({
         <div>
           <div className="flex items-center gap-2">
             <span className="size-2 rounded-full bg-emerald-500" />
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Live remote job feed</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Remote feeds matched to your target work</p>
           </div>
           <h2 className="mt-2 text-lg font-semibold text-slate-950">Find roles that match your skills</h2>
           <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600">
-            Latest listings from Jobicy are matched against your web, design, and content skills. Keyword matches help sort the list; they are not an AI fit score.
+            Listings need a target role in the title. Full-stack and frontend roles also need a matching skill such as React, Next.js, Supabase, or Figma-to-code. Broad software-engineering titles are left out.
+          </p>
+          <p className="mt-2 max-w-3xl text-xs leading-5 text-slate-500">
+            Priority searches: Full-stack/React/Next.js; AI and business automation; Klaviyo/email; WordPress/WooCommerce; Figma, landing pages and marketing design; specialist copywriting.
+          </p>
+          <p className="mt-1 max-w-3xl text-xs leading-5 text-slate-500">
+            Paused until you confirm matching examples: Shopify, AI UGC, social-media account management, and logo-only work.
           </p>
         </div>
         <Button type="button" variant="outline" className="w-full sm:w-auto" onClick={() => void loadJobs()} disabled={loading}>
@@ -183,7 +191,12 @@ export function JobDiscovery({
         </Button>
       </section>
 
-      {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>}
+      {(error || sourceErrors.length > 0) && (
+        <div role="alert" className="space-y-1 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+          {error && <p>{error}</p>}
+          {sourceErrors.map((message) => <p key={message}>{message}</p>)}
+        </div>
+      )}
 
       <section aria-label="Filter job listings" className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
         <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto_auto]">
@@ -193,14 +206,19 @@ export function JobDiscovery({
             <Input value={query} onChange={(event) => setQuery(event.target.value)} className="h-10 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0" placeholder="Search title, company, location, or description" />
           </label>
           <label className="flex min-h-11 items-center rounded-lg border border-slate-200 px-3 text-sm text-slate-600">
-            <span className="sr-only">Filter by skill category</span>
-            <select aria-label="Filter by skill category" value={category} onChange={(event) => setCategory(event.target.value as Category)} className="h-full bg-transparent outline-none">
-              {categories.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
+            <span className="sr-only">Filter by listing location text</span>
+            <select aria-label="Filter by listing location text" value={region} onChange={(event) => setRegion(event.target.value as Region)} className="h-full bg-transparent outline-none">
+              <option value="nigeria">Nigeria, Africa-wide, or worldwide</option>
+              <option value="africa">Africa or worldwide</option>
+              <option value="remote">Remote, verify eligibility</option>
+              <option value="all">Any country or location</option>
             </select>
           </label>
-          <label className="flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border border-slate-200 px-3 text-sm text-slate-600">
-            <input type="checkbox" checked={showAll} onChange={(event) => setShowAll(event.target.checked)} className="size-4 accent-violet-700" />
-            Show all listings
+          <label className="flex min-h-11 items-center rounded-lg border border-slate-200 px-3 text-sm text-slate-600">
+            <span className="sr-only">Filter by skill category</span>
+            <select aria-label="Filter by target work category" value={category} onChange={(event) => setCategory(event.target.value as JobCategory)} className="h-full bg-transparent outline-none">
+              {jobCategories.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
+            </select>
           </label>
         </div>
       </section>
@@ -208,24 +226,26 @@ export function JobDiscovery({
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold text-slate-950">{filteredJobs.length} {filteredJobs.length === 1 ? 'listing' : 'listings'}</h2>
-          <p className="mt-1 text-sm text-slate-600">{showAll ? 'Showing all recently published roles.' : 'Showing roles with profile keyword matches.'}</p>
+          <p className="mt-1 text-sm text-slate-600">
+            Showing only listings that match your target-role rules.
+            {' '}{region === 'nigeria' ? 'Location text must mention Nigeria, Africa-wide, or worldwide. Confirm actual eligibility on the listing.' : region === 'africa' ? 'Location text must mention an African country, Africa-wide, or worldwide. Confirm actual eligibility on the listing.' : region === 'remote' ? 'Remote listings may have country restrictions. Confirm on the source.' : 'Location eligibility varies by listing.'}
+          </p>
         </div>
         {updatedAt && (
           <p className="flex items-center gap-1.5 text-xs text-slate-500">
-            <Clock3 aria-hidden="true" className="size-3.5" />Feed updated {formatDate(updatedAt)}
+            <Clock3 aria-hidden="true" className="size-3.5" />Source data updated {formatDate(updatedAt)}
           </p>
         )}
       </div>
 
       {loading ? (
         <div role="status" className="rounded-2xl border border-slate-200 bg-white px-6 py-14 text-center text-sm text-slate-600">
-          <LoaderCircle aria-hidden="true" className="mx-auto mb-3 size-5 animate-spin text-violet-700" />Loading Jobicy listings…
+          <LoaderCircle aria-hidden="true" className="mx-auto mb-3 size-5 animate-spin text-violet-700" />Loading job listings…
         </div>
       ) : filteredJobs.length ? (
         <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
-          {filteredJobs.map(({ job, score }) => {
+          {filteredJobs.map(({ job, categories }) => {
             const saved = savedUrls.has(job.url)
-            const matches = terms.filter((term) => `${job.title} ${job.location} ${job.industries.join(' ')} ${job.types.join(' ')} ${job.excerpt}`.toLowerCase().includes(term))
             return (
               <Card key={job.id} className="border-slate-200 bg-white shadow-sm">
                 <CardContent className="flex h-full flex-col p-5">
@@ -234,7 +254,11 @@ export function JobDiscovery({
                       <p className="truncate text-sm font-semibold text-slate-600">{job.company}</p>
                       <h3 className="mt-1 text-lg font-bold leading-6 text-slate-950">{job.title}</h3>
                     </div>
-                    {score > 0 && <Badge variant="outline" className="shrink-0">{matches.length} skill {matches.length === 1 ? 'match' : 'matches'}</Badge>}
+                    {categories.map((matchedCategory) => (
+                      <Badge key={matchedCategory} variant="outline" className="shrink-0">
+                        {targetJobCategories.find((item) => item.id === matchedCategory)?.label}
+                      </Badge>
+                    ))}
                   </div>
 
                   <div className="mt-3 flex flex-wrap gap-2">
@@ -248,7 +272,7 @@ export function JobDiscovery({
 
                   <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-slate-100 pt-4">
                     <a href={job.url} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-1 rounded-lg bg-violet-800 px-3 text-sm font-medium text-white hover:bg-violet-900">
-                      View & apply on Jobicy <ArrowUpRight aria-hidden="true" className="size-4" />
+                      View & apply on {job.sourceName} <ArrowUpRight aria-hidden="true" className="size-4" />
                     </a>
                     <Button
                       type="button"
@@ -271,13 +295,22 @@ export function JobDiscovery({
           <BriefcaseBusiness aria-hidden="true" className="mx-auto size-6 text-slate-400" />
           <h3 className="mt-3 text-sm font-semibold text-slate-900">{jobs.length ? 'No matching listings' : 'No remote jobs found'}</h3>
           <p className="mx-auto mt-1 max-w-md text-sm leading-6 text-slate-500">
-            {jobs.length ? 'Try a different keyword or turn on “Show all listings”.' : 'The feed returned no listings. Try refreshing later.'}
+            {jobs.length ? 'Try another keyword, location, or target-role category.' : 'No target-role listings came back from the feeds. Try refreshing later.'}
           </p>
         </div>
       )}
 
+      {nextCursor && !loading && (
+        <div className="flex justify-center">
+          <Button type="button" variant="outline" disabled={loadingMore} onClick={() => void loadJobs(nextCursor, true)}>
+            {loadingMore ? <LoaderCircle aria-hidden="true" data-icon="inline-start" className="animate-spin" /> : <Plus aria-hidden="true" data-icon="inline-start" />}
+            {loadingMore ? 'Loading more Jobicy listings…' : 'Load more Jobicy listings'}
+          </Button>
+        </div>
+      )}
+
       <p className="text-xs leading-5 text-slate-500">
-        Job listings provided by <a href="https://jobicy.com" target="_blank" rel="noreferrer" className="font-medium text-violet-800 underline underline-offset-2">Jobicy</a>. Feed data is cached for up to 6 hours. Check the source listing for current status and application details.
+        Listings and application links: <a href="https://jobicy.com" target="_blank" rel="noreferrer" className="font-medium text-violet-800 underline underline-offset-2">Jobicy</a> and <a href="https://remoteok.com" target="_blank" rel="noreferrer" className="font-medium text-violet-800 underline underline-offset-2">Remote OK</a>. Feed responses are cached for up to 6 hours. Check the source listing for current status and application details.
       </p>
     </div>
   )
