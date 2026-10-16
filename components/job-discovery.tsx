@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import type { OpportunityFormValues } from '@/components/dashboard'
-import { getTargetJobCategories, jobCategories, targetJobCategories, type JobCategory } from '@/lib/jobs/profile'
+import { jobCategories, targetJobCategories, type JobCategory, type TargetJobCategory } from '@/lib/jobs/profile'
 
 type RemoteJob = {
   id: string
@@ -21,6 +21,7 @@ type RemoteJob = {
   salary: string | null
   publishedAt: string | null
   sourceName: 'Jobicy' | 'Remote OK'
+  targetCategories: TargetJobCategory[]
 }
 
 type FeedResponse = {
@@ -140,7 +141,7 @@ export function JobDiscovery({
   const filteredJobs = useMemo(() => jobs
     .map((job) => ({
       job,
-      categories: getTargetJobCategories(job.title, job.excerpt, [...job.industries, ...job.types]),
+      categories: job.targetCategories,
     }))
     .filter(({ categories }) => category === 'all' || categories.includes(category))
     .filter(({ job }) => matchesRegion(job, region)
@@ -176,13 +177,13 @@ export function JobDiscovery({
           </div>
           <h2 className="mt-2 text-lg font-semibold text-slate-950">Find roles that match your skills</h2>
           <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600">
-            Listings need a target role in the title. Full-stack and frontend roles also need a matching skill such as React, Next.js, Supabase, or Figma-to-code. Broad software-engineering titles are left out.
+            A listing must show a target role and a matching skill in its title or description. Broad software-engineering titles are left out unless they clearly name a web specialty.
           </p>
           <p className="mt-2 max-w-3xl text-xs leading-5 text-slate-500">
-            Priority searches: Full-stack/React/Next.js; AI and business automation; Klaviyo/email; WordPress/WooCommerce; Figma, landing pages and marketing design; specialist copywriting.
+            Searches cover web development, email and Klaviyo, websites and WordPress, design and video, plus writing and content support.
           </p>
           <p className="mt-1 max-w-3xl text-xs leading-5 text-slate-500">
-            Paused until you confirm matching examples: Shopify, AI UGC, social-media account management, and logo-only work.
+            These are search terms, not proof that every listing fits your experience. Shopify remains outside the active searches.
           </p>
         </div>
         <Button type="button" variant="outline" className="w-full sm:w-auto" onClick={() => void loadJobs()} disabled={loading}>
@@ -227,7 +228,7 @@ export function JobDiscovery({
         <div>
           <h2 className="text-xl font-bold text-slate-950">{filteredJobs.length} {filteredJobs.length === 1 ? 'listing' : 'listings'}</h2>
           <p className="mt-1 text-sm text-slate-600">
-            Showing only listings that match your target-role rules.
+            Showing listings with both a target-role signal and related skill evidence.
             {' '}{region === 'nigeria' ? 'Location text must mention Nigeria, Africa-wide, or worldwide. Confirm actual eligibility on the listing.' : region === 'africa' ? 'Location text must mention an African country, Africa-wide, or worldwide. Confirm actual eligibility on the listing.' : region === 'remote' ? 'Remote listings may have country restrictions. Confirm on the source.' : 'Location eligibility varies by listing.'}
           </p>
         </div>

@@ -20,8 +20,8 @@
 ## Operational Objectives
 1. Web Scraping & Ingestion:
    - Find relevant remote jobs and projects across Africa and global markets, using permitted source APIs and feeds.
-   - Prioritize full-stack/frontend development, AI/API and business automation, email design and lifecycle work, WordPress/WooCommerce, landing-page and marketing design, and specialist copywriting/content roles.
-   - Filter out broad software-engineering roles unless the listing names a specific web specialization. Do not include Shopify, AI UGC, social-media account management, or logo-only work in active searches without portfolio evidence or owner confirmation.
+   - Search web development (React, Next.js, TypeScript, Supabase, SaaS, APIs, dashboards, MVPs, EdTech, e-commerce, maintenance), email/Klaviyo/lifecycle automation, websites (WordPress, WooCommerce, Elementor, Webflow), landing pages, design/video/AI UGC, and writing/social/content roles.
+   - Filter out broad software-engineering roles unless the listing names a specific web specialization. Shopify remains outside active searches. Search inclusion does not establish proficiency or portfolio evidence; do not claim unverified skills in applications.
 2. Design & Output Generation:
    - Ensure all layouts, mockups, and interface recommendations align with a clean, light-only Vercel and Linear aesthetic. Do not add dark-mode backgrounds.
    - Deliver clear, production-ready code blocks and actionable implementation steps without filler text.
