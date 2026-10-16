@@ -7,12 +7,10 @@ export const revalidate = 21600
 
 const jobicyEndpoint = 'https://jobicy.com/api/v2/remote-jobs'
 const remoteOkEndpoint = 'https://remoteok.com/api'
-const remotiveEndpoint = 'https://remotive.com/api/remote-jobs'
 const freehireEndpoint = 'https://freehire.me/api/v1/jobs/search'
 const freehireSearchTerms = ['developer', 'engineer', 'designer', 'automation', 'email', 'writer', 'content', 'marketing']
 const jobicyListingPattern = /^https:\/\/jobicy\.com\/jobs\/[a-zA-Z0-9/_-]+$/
 const remoteOkListingPattern = /^https:\/\/remoteok\.com\/remote-jobs\/[a-zA-Z0-9/_-]+$/i
-const remotiveListingPattern = /^https:\/\/remotive\.com\/remote-jobs\/[a-zA-Z0-9/_-]+$/i
 
 export type JobListing = {
   id: string
@@ -25,7 +23,7 @@ export type JobListing = {
   excerpt: string
   salary: string | null
   publishedAt: string | null
-  sourceName: 'Jobicy' | 'Remote OK' | 'Remotive' | 'Freehire'
+  sourceName: 'Jobicy' | 'Remote OK' | 'Freehire'
   targetCategories: TargetJobCategory[]
 }
 
@@ -126,32 +124,6 @@ function normalizeRemoteOkJob(value: unknown): NormalizedJobListing | null {
     salary: formatSalary(job.salary_min, job.salary_max, null, null),
     publishedAt: stringValue(job.date) || null,
     sourceName: 'Remote OK',
-  }
-}
-
-function normalizeRemotiveJob(value: unknown): NormalizedJobListing | null {
-  if (!value || typeof value !== 'object') return null
-  const job = value as Record<string, unknown>
-  const url = stringValue(job.url)
-  if (!remotiveListingPattern.test(url)) return null
-
-  const id = typeof job.id === 'number' || typeof job.id === 'string' ? String(job.id) : ''
-  const title = stringValue(job.title)
-  const company = stringValue(job.company_name)
-  if (!id || !title || !company) return null
-
-  return {
-    id: `remotive-${id}`,
-    url,
-    title: title.slice(0, 250),
-    company: company.slice(0, 160),
-    location: stringValue(job.candidate_required_location).slice(0, 200) || 'Remote · eligibility not specified',
-    industries: [...stringArray(job.tags), ...stringArray([job.category])].slice(0, 12),
-    types: stringValue(job.job_type) ? [stringValue(job.job_type)] : [],
-    excerpt: stringValue(job.description).slice(0, 1200),
-    salary: stringValue(job.salary) || null,
-    publishedAt: stringValue(job.publication_date) || null,
-    sourceName: 'Remotive',
   }
 }
 
@@ -256,35 +228,6 @@ async function fetchRemoteOk(): Promise<SourceResult> {
   return { jobs, updatedAt, nextCursor: null }
 }
 
-async function fetchRemotive(): Promise<SourceResult> {
-  const response = await fetch(remotiveEndpoint, {
-    headers: { Accept: 'application/json' },
-    next: { revalidate },
-  })
-  if (!response.ok) throw new Error(`Remotive returned HTTP ${response.status}.`)
-
-  const payload: unknown = await response.json()
-  if (!payload || typeof payload !== 'object' || !('jobs' in payload) || !Array.isArray(payload.jobs)) {
-    throw new Error('Remotive returned an unexpected response.')
-  }
-
-  const jobs = payload.jobs
-    .map((value) => {
-      const job = normalizeRemotiveJob(value)
-      if (!job || !value || typeof value !== 'object') return null
-      const details = stringValue((value as Record<string, unknown>).description).slice(0, 8000)
-      const targetCategories = getTargetJobCategories(
-        job.title,
-        details,
-        [...job.industries, ...job.types],
-      )
-      return targetCategories.length ? { ...job, targetCategories } : null
-    })
-    .filter((job): job is JobListing => job !== null)
-
-  return { jobs, updatedAt: '', nextCursor: null }
-}
-
 async function fetchFreehireSearch(term: string): Promise<JobListing[]> {
   const url = new URL(freehireEndpoint)
   url.searchParams.set('q', term)
@@ -353,14 +296,12 @@ export async function GET(request: Request) {
   const results = await Promise.allSettled([
     fetchJobicyPage(requestedCursor),
     requestedCursor ? Promise.resolve(null) : fetchRemoteOk(),
-    requestedCursor ? Promise.resolve(null) : fetchRemotive(),
     requestedCursor ? Promise.resolve(null) : fetchFreehireJobs(),
   ])
 
   const jobicyResult = results[0]
   const remoteOkResult = results[1]
-  const remotiveResult = results[2]
-  const freehireResult = results[3]
+  const freehireResult = results[2]
   const jobs: JobListing[] = []
   const sourceErrors: string[] = []
   let updatedAt = ''
@@ -385,13 +326,6 @@ export async function GET(request: Request) {
     sourceErrors.push('Remote OK listings could not be loaded.')
   }
 
-  if (remotiveResult.status === 'fulfilled' && remotiveResult.value) {
-    jobs.push(...remotiveResult.value.jobs)
-  } else if (remotiveResult.status === 'rejected') {
-    console.error('Could not retrieve the Remotive job feed.', remotiveResult.reason)
-    sourceErrors.push('Remotive listings could not be loaded.')
-  }
-
   if (freehireResult.status === 'fulfilled' && freehireResult.value) {
     jobs.push(...freehireResult.value.jobs)
     sourceErrors.push(...freehireResult.value.sourceErrors)
@@ -410,7 +344,7 @@ export async function GET(request: Request) {
     updatedAt,
     nextCursor,
     sourceErrors,
-    notice: 'Jobicy, Remote OK, Remotive, and Freehire listings. Each source is credited and the application link goes to the original listing. Remotive listings may be delayed by 24 hours. Verify location eligibility and availability on the source.',
+    notice: 'Jobicy, Remote OK, and Freehire listings. Each source is credited and application links go to the original listing. Verify location eligibility and availability on the source.',
   }, {
     headers: { 'Cache-Control': 'private, no-store' },
   })
