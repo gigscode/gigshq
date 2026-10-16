@@ -4,8 +4,8 @@ import { useMemo, useState, type FormEvent } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import {
-  BriefcaseBusiness, Check, FolderKanban, LogOut, Mail, Menu, Pencil, Plus, Search,
-  Settings2, Target, Trash2, UserRound, X,
+  BookmarkCheck, BriefcaseBusiness, Check, FolderKanban, LogOut, Mail, Menu, Pencil, Plus, Search,
+  Send, Settings2, Target, Trash2, UserRound, X,
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -45,12 +45,12 @@ export type OpportunityFormValues = {
 const opportunityFields = 'id, company_name, title, description, source_name, source_url, contact_name, contact_email, compensation, fit_score, status, created_at'
 const statuses = ['new', 'saved', 'applied', 'archived']
 const navItems = [
-  { label: 'Job discovery', key: 'discovery', icon: Search },
-  { label: 'Opportunities & Leads', key: 'opportunities', icon: Target },
-  { label: 'Campaigns & Ingestion', key: 'campaigns', icon: FolderKanban },
-  { label: 'AI Pitch Generator', key: 'pitch', icon: BriefcaseBusiness },
-  { label: 'Email Outbound Tracker', key: 'outbound', icon: Mail },
-  { label: 'Settings / Profile Context', key: 'settings', icon: Settings2 },
+  { label: 'Discover', key: 'discovery', icon: Search },
+  { label: 'Leads', key: 'opportunities', icon: Target },
+  { label: 'Campaigns', key: 'campaigns', icon: FolderKanban },
+  { label: 'Pitch drafts', key: 'pitch', icon: BriefcaseBusiness },
+  { label: 'Outreach', key: 'outbound', icon: Mail },
+  { label: 'Profile', key: 'settings', icon: Settings2 },
 ]
 
 function safeExternalUrl(value: string | null) {
@@ -289,26 +289,28 @@ export function Dashboard({
   }
 
   const title = navItems.find((item) => item.key === active)?.label ?? navItems[0].label
+  const savedLeadCount = opportunities.filter((item) => item.status === 'new' || item.status === 'saved').length
+  const appliedCount = opportunities.filter((item) => item.status === 'applied').length
 
   return (
     <div className="flex min-h-screen bg-[#f6f7fb] text-slate-900">
-      <aside className="hidden w-[264px] shrink-0 flex-col border-r border-slate-200 bg-white px-5 py-6 lg:flex">
+      <aside className="hidden w-62 shrink-0 flex-col bg-[#32177d] px-4 py-6 text-white lg:flex">
         <div className="flex items-center gap-3 px-2">
-          <Image src="/gigshqicon.png" alt="" width={40} height={40} className="rounded-xl" />
-          <span className="text-2xl font-bold tracking-tight">gigs<span className="text-violet-700">hq</span></span>
+          <Image src="/gigshqicon.png" alt="" width={40} height={40} className="rounded-xl bg-white p-1" />
+          <span className="text-2xl font-bold tracking-tight">gigs<span className="text-violet-200">hq</span></span>
         </div>
-        <p className="mb-3 mt-10 px-3 text-[11px] font-semibold uppercase tracking-[.12em] text-slate-400">Your workspace</p>
+        <p className="mb-3 mt-10 px-3 text-[11px] font-semibold uppercase tracking-[.12em] text-violet-200/70">Your workspace</p>
         <nav aria-label="Main navigation" className="flex flex-col gap-1">
           {navItems.map(({ label, key, icon: Icon }) => (
-            <button key={key} type="button" aria-current={active === key ? 'page' : undefined} onClick={() => setActive(key)} className={`flex min-h-11 items-center gap-3 rounded-lg px-3 text-left text-sm transition-colors ${active === key ? 'bg-violet-50 font-semibold text-violet-900' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+            <button key={key} type="button" aria-current={active === key ? 'page' : undefined} onClick={() => setActive(key)} className={`flex min-h-11 items-center gap-3 rounded-lg px-3 text-left text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${active === key ? 'bg-white font-semibold text-[#32177d] shadow-sm' : 'text-violet-50 hover:bg-white/10 hover:text-white'}`}>
               <Icon aria-hidden="true" className="size-[18px]" />{label}
             </button>
           ))}
         </nav>
-        <div className="mt-auto rounded-xl border border-slate-200 bg-slate-50 p-4">
-          <div className="mb-3 flex items-center gap-2"><UserRound aria-hidden="true" className="size-4 text-violet-700" /><span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Signed in</span></div>
-          <p className="break-all text-xs leading-5 text-slate-600">{userEmail}</p>
-          <Button variant="ghost" size="sm" className="mt-3 px-0 text-slate-600" onClick={signOut}><LogOut aria-hidden="true" data-icon="inline-start" />Sign out</Button>
+        <div className="mt-auto rounded-xl border border-white/15 bg-white/10 p-4">
+          <div className="mb-3 flex items-center gap-2"><UserRound aria-hidden="true" className="size-4 text-violet-200" /><span className="text-[11px] font-semibold uppercase tracking-wide text-violet-100/80">Signed in</span></div>
+          <p className="break-all text-xs leading-5 text-violet-50">{userEmail}</p>
+          <Button variant="ghost" size="sm" className="mt-3 px-0 text-violet-50 hover:bg-white/10 hover:text-white" onClick={signOut}><LogOut aria-hidden="true" data-icon="inline-start" />Sign out</Button>
         </div>
       </aside>
 
@@ -325,14 +327,14 @@ export function Dashboard({
             </Button>
           </div>
         </header>
-        <nav id="mobile-navigation" aria-label="Main navigation" className={`${menuOpen ? 'block' : 'hidden'} border-b border-slate-200 bg-white px-4 py-2 lg:hidden`}>
+        <nav id="mobile-navigation" aria-label="Main navigation" className={`${menuOpen ? 'block' : 'hidden'} border-b border-violet-950/20 bg-[#32177d] px-4 py-3 lg:hidden`}>
           <div className="flex flex-col gap-1">
             {navItems.map(({ label, key, icon: Icon }) => (
-              <button key={key} type="button" aria-current={active === key ? 'page' : undefined} onClick={() => { setActive(key); setMenuOpen(false) }} className={`flex min-h-11 items-center gap-3 rounded-lg px-3 text-left text-sm font-medium ${active === key ? 'bg-violet-50 text-violet-900' : 'text-slate-600 hover:bg-slate-50'}`}>
+              <button key={key} type="button" aria-current={active === key ? 'page' : undefined} onClick={() => { setActive(key); setMenuOpen(false) }} className={`flex min-h-11 items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${active === key ? 'bg-white text-[#32177d] shadow-sm' : 'text-violet-50 hover:bg-white/10 hover:text-white'}`}>
                 <Icon aria-hidden="true" className="size-[18px]" />{label}
               </button>
             ))}
-            <button type="button" onClick={signOut} className="flex min-h-11 items-center gap-3 rounded-lg px-3 text-left text-sm font-medium text-slate-600 hover:bg-slate-50">
+            <button type="button" onClick={signOut} className="flex min-h-11 items-center gap-3 rounded-lg px-3 text-left text-sm font-medium text-violet-50 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
               <LogOut aria-hidden="true" className="size-[18px]" />Sign out
             </button>
           </div>
@@ -341,10 +343,52 @@ export function Dashboard({
           <div className="mx-auto flex max-w-[1440px] flex-col gap-6">
             {dataError && <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">Supabase returned an error: {dataError}</div>}
             {active === 'discovery' ? (
-              <JobDiscovery
-                savedSourceUrls={opportunities.flatMap((opportunity) => opportunity.source_url ? [opportunity.source_url] : [])}
-                onSave={saveOpportunity}
-              />
+              <>
+                <section aria-labelledby="job-search-overview-title" className="overflow-hidden rounded-2xl border border-violet-100 bg-white shadow-sm">
+                  <div className="relative px-5 py-6 sm:px-7 sm:py-7">
+                    <div aria-hidden="true" className="pointer-events-none absolute -right-12 -top-24 size-64 rounded-full border-[32px] border-violet-50/80" />
+                    <div className="relative flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+                      <div className="max-w-2xl">
+                        <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[.14em] text-violet-800">
+                          <span className="size-2 rounded-full bg-emerald-500" />
+                          Your personal job search
+                        </p>
+                        <h2 id="job-search-overview-title" className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950 sm:text-3xl">Find your next opportunity</h2>
+                        <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600">
+                          Explore relevant roles, check each source for eligibility, and save the opportunities you want to pursue.
+                        </p>
+                      </div>
+                      <p className="relative max-w-xs rounded-xl bg-violet-50 px-4 py-3 text-xs leading-5 text-violet-950">
+                        Your listings are matched by role and skill signals. Confirm details on the original posting.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="grid border-t border-slate-100 sm:grid-cols-2">
+                    <div className="flex items-center gap-3 border-b border-slate-100 px-5 py-4 sm:border-b-0 sm:border-r sm:px-7">
+                      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-violet-50 text-violet-800">
+                        <BookmarkCheck aria-hidden="true" className="size-5" />
+                      </span>
+                      <div>
+                        <p className="text-2xl font-extrabold leading-none tabular-nums text-slate-950">{savedLeadCount.toLocaleString()}</p>
+                        <p className="mt-1 text-xs font-medium text-slate-500">Saved leads to review</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 px-5 py-4 sm:px-7">
+                      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-800">
+                        <Send aria-hidden="true" className="size-4" />
+                      </span>
+                      <div>
+                        <p className="text-2xl font-extrabold leading-none tabular-nums text-slate-950">{appliedCount.toLocaleString()}</p>
+                        <p className="mt-1 text-xs font-medium text-slate-500">Marked as applied</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <JobDiscovery
+                  savedSourceUrls={opportunities.flatMap((opportunity) => opportunity.source_url ? [opportunity.source_url] : [])}
+                  onSave={saveOpportunity}
+                />
+              </>
             ) : active === 'opportunities' ? (
               <>
                 <section className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:p-6">

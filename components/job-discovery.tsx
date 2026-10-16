@@ -75,18 +75,24 @@ function formatPostedDate(value: string | null) {
     : new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(date)
 }
 
+function displayCopy(value: string) {
+  return value.replace(/\u2014/g, ' - ')
+}
+
 function plainText(value: string) {
-  return value
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/&nbsp;|&#160;/gi, ' ')
-    .replace(/&amp;/gi, '&')
-    .replace(/&quot;/gi, '"')
-    .replace(/&#39;|&apos;/gi, "'")
-    .replace(/&lt;/gi, '<')
-    .replace(/&gt;/gi, '>')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, 10000)
+  return displayCopy(
+    value
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/&nbsp;|&#160;/gi, ' ')
+      .replace(/&amp;/gi, '&')
+      .replace(/&quot;/gi, '"')
+      .replace(/&#39;|&apos;/gi, "'")
+      .replace(/&lt;/gi, '<')
+      .replace(/&gt;/gi, '>')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 10000),
+  )
 }
 
 export function JobDiscovery({
@@ -261,8 +267,8 @@ export function JobDiscovery({
                 <CardContent className="flex h-full flex-col p-5">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-slate-600">{job.company}</p>
-                      <h3 className="mt-1 text-lg font-bold leading-6 text-slate-950">{job.title}</h3>
+                      <p className="truncate text-sm font-semibold text-slate-600">{displayCopy(job.company)}</p>
+                      <h3 className="mt-1 text-lg font-bold leading-6 text-slate-950">{displayCopy(job.title)}</h3>
                     </div>
                     {categories.map((matchedCategory) => (
                       <Badge key={matchedCategory} variant="outline" className="shrink-0">
@@ -272,9 +278,9 @@ export function JobDiscovery({
                   </div>
 
                   <div className="mt-3 flex flex-wrap gap-2">
-                    <Badge variant="secondary">{job.location}</Badge>
-                    {job.types.slice(0, 2).map((type) => <Badge key={type} variant="outline">{type}</Badge>)}
-                    {job.industries.slice(0, 2).map((industry) => <Badge key={industry} variant="outline">{industry}</Badge>)}
+                    <Badge variant="secondary">{displayCopy(job.location)}</Badge>
+                    {job.types.slice(0, 2).map((type) => <Badge key={type} variant="outline">{displayCopy(type)}</Badge>)}
+                    {job.industries.slice(0, 2).map((industry) => <Badge key={industry} variant="outline">{displayCopy(industry)}</Badge>)}
                     {job.sourceName === 'Freehire' && <Badge variant="outline">Freehire source</Badge>}
                   </div>
 
@@ -286,7 +292,7 @@ export function JobDiscovery({
                   </p>
 
                   {job.excerpt && <p className="mt-4 line-clamp-4 text-sm leading-6 text-slate-600">{plainText(job.excerpt)}</p>}
-                  {job.salary && <p className="mt-3 text-sm font-medium text-slate-800">Listed compensation: {job.salary}</p>}
+                  {job.salary && <p className="mt-3 text-sm font-medium text-slate-800">Listed compensation: {displayCopy(job.salary)}</p>}
 
                   <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-slate-100 pt-4">
                     <a href={job.url} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-1 rounded-lg bg-violet-800 px-3 text-sm font-medium text-white hover:bg-violet-900">

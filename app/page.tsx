@@ -8,29 +8,8 @@ import {
   CircleHelp,
   MapPin,
   Search,
-  Sparkles,
+  Send,
 } from 'lucide-react'
-
-const features = [
-  {
-    number: '01',
-    icon: Search,
-    title: 'Search with your location in mind',
-    description: 'Explore remote roles with Nigeria, Africa-wide, and worldwide location filters. Always check the employer’s listing for exact eligibility.',
-  },
-  {
-    number: '02',
-    icon: BookmarkCheck,
-    title: 'Keep good leads close',
-    description: 'Save opportunities and track where each application stands, instead of losing promising roles in open tabs and message threads.',
-  },
-  {
-    number: '03',
-    icon: Sparkles,
-    title: 'Prepare a stronger first draft',
-    description: 'Create an editable pitch from a saved opportunity and your CV. Review every draft and make it your own before applying.',
-  },
-]
 
 export default function HomePage() {
   return (
@@ -43,7 +22,7 @@ export default function HomePage() {
         <nav aria-label="Main navigation" className="flex items-center gap-3 sm:gap-7">
           <a href="#how-it-helps" className="hidden text-sm font-semibold text-[#56615c] transition-colors hover:text-[#18231f] sm:inline">How it helps</a>
           <Link href="/login" className="text-sm font-semibold text-[#56615c] transition-colors hover:text-[#18231f]">Sign in</Link>
-          <Link href="/login?mode=sign-up" className="inline-flex min-h-10 items-center gap-2 rounded-full bg-[#573da5] px-4 text-sm font-semibold text-white transition-colors hover:bg-[#463087] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#573da5]">
+          <Link href="/login?mode=sign-up" className="inline-flex min-h-10 items-center gap-2 rounded-lg bg-[#573da5] px-4 text-sm font-semibold text-white transition-colors hover:bg-[#463087] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#573da5]">
             Get started <ArrowRight aria-hidden="true" className="size-4" />
           </Link>
         </nav>
@@ -64,11 +43,11 @@ export default function HomePage() {
             Discover remote digital opportunities, save the ones worth pursuing, and keep your applications organized in one personal workspace.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Link href="/login?mode=sign-up" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#573da5] px-6 text-sm font-bold text-white shadow-[0_10px_24px_-12px_rgba(87,61,165,.8)] transition-all hover:-translate-y-0.5 hover:bg-[#463087] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#573da5]">
-              Create your account <ArrowRight aria-hidden="true" className="size-4" />
+            <Link href="/login?mode=sign-up" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[#573da5] px-6 text-sm font-bold text-white shadow-[0_10px_24px_-12px_rgba(87,61,165,.8)] transition-all hover:-translate-y-0.5 hover:bg-[#463087] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#573da5]">
+              Start your search <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
-            <a href="#how-it-helps" className="inline-flex min-h-12 items-center justify-center rounded-full px-5 text-sm font-bold text-[#38443e] transition-colors hover:bg-white">
-              See how it works
+            <a href="#how-it-helps" className="inline-flex min-h-12 items-center justify-center rounded-lg px-5 text-sm font-bold text-[#38443e] transition-colors hover:bg-white">
+              How it works
             </a>
           </div>
           <p className="mt-5 max-w-lg text-xs leading-5 text-[#737c76]">
@@ -139,28 +118,83 @@ export default function HomePage() {
 
       <section id="how-it-helps" className="border-y border-[#e9e7e0] bg-white">
         <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
-          <div className="max-w-2xl">
-            <p className="text-xs font-extrabold uppercase tracking-[.18em] text-[#6549ad]">A calmer way to search</p>
-            <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-[-.045em] text-[#1c2922] sm:text-4xl">
-              Less tab-juggling.<br className="hidden sm:block" /> More follow-through.
-            </h2>
-            <p className="mt-4 text-sm leading-7 text-[#637067] sm:text-base">
-              gigshq brings discovery and application tracking together, so the next useful step is easier to see.
+          <div className="grid gap-10 lg:grid-cols-[.78fr_1.22fr] lg:items-end">
+            <div>
+              <p className="text-xs font-extrabold uppercase tracking-[.18em] text-[#6549ad]">From search to application</p>
+              <h2 className="mt-3 max-w-lg text-3xl font-extrabold leading-tight tracking-[-.045em] text-[#1c2922] sm:text-4xl">
+                See your job search take shape.
+              </h2>
+            </div>
+            <p className="max-w-2xl text-sm leading-7 text-[#637067] sm:text-base">
+              Find roles from selected feeds, save the ones worth checking, then keep your next step with each lead.
             </p>
           </div>
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {features.map(({ number, icon: Icon, title, description }) => (
-              <article key={number} className="group rounded-2xl border border-[#eae8e1] bg-[#fdfdfb] p-6 transition-all hover:-translate-y-1 hover:border-[#d9d1ec] hover:bg-white hover:shadow-[0_16px_36px_-28px_rgba(41,48,41,.45)] sm:p-7">
-                <div className="flex items-center justify-between">
-                  <span className="grid size-11 place-items-center rounded-xl bg-[#f0edf8] text-[#6549ad] transition-transform group-hover:scale-105">
-                    <Icon aria-hidden="true" className="size-5" />
-                  </span>
-                  <span className="font-mono text-xs font-semibold tracking-widest text-[#a1a79f]">{number}</span>
+
+          <div className="mt-10 grid overflow-hidden rounded-2xl border border-[#e6e3dc] bg-[#fbfaf7] shadow-[0_24px_60px_-44px_rgba(37,46,39,.45)] lg:grid-cols-[1.2fr_.8fr]">
+            <div className="border-b border-[#e6e3dc] p-4 sm:p-6 lg:border-b-0 lg:border-r">
+              <div className="overflow-hidden rounded-xl border border-[#e8e5de] bg-white">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#eeece7] px-4 py-3">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[.14em] text-[#858e87]">Job discovery</p>
+                    <p className="mt-0.5 text-sm font-bold text-[#202c26]">Find a role to explore</p>
+                  </div>
+                  <span className="rounded-md border border-[#e6e1f0] bg-[#f6f3fb] px-2.5 py-1 text-[10px] font-bold text-[#573da5]">Preview</span>
                 </div>
-                <h3 className="mt-6 text-lg font-extrabold tracking-tight text-[#253129]">{title}</h3>
-                <p className="mt-2 text-sm leading-6 text-[#68736c]">{description}</p>
-              </article>
-            ))}
+                <div className="grid gap-2.5 p-3 sm:grid-cols-[1fr_auto] sm:p-4">
+                  <div className="flex min-h-10 items-center gap-2 rounded-lg border border-[#e7e8e2] px-3">
+                    <Search aria-hidden="true" className="size-3.5 shrink-0 text-[#879088]" />
+                    <span className="text-xs text-[#69746d]">Role, skill, or company</span>
+                  </div>
+                  <div className="flex min-h-10 items-center gap-2 rounded-lg border border-[#e7e8e2] px-3 text-xs font-medium text-[#56615c]">
+                    <MapPin aria-hidden="true" className="size-3.5 text-[#6549ad]" />
+                    Nigeria, Africa, worldwide
+                  </div>
+                </div>
+                <div className="mx-3 mb-3 rounded-lg border border-[#ebe9e3] p-4 sm:mx-4 sm:mb-4">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-wide text-[#858e87]">Illustrative listing, not live</p>
+                      <h3 className="mt-1 text-base font-extrabold tracking-tight text-[#202c26]">Frontend Developer</h3>
+                      <p className="mt-1 text-xs text-[#68736c]">Example role · Remote location to verify</p>
+                    </div>
+                    <span className="rounded-full bg-[#eaf2e9] px-2.5 py-1 text-[10px] font-bold text-[#477454]">Web development</span>
+                  </div>
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[#eeece7] pt-3">
+                    <span className="inline-flex items-center gap-1.5 text-[11px] text-[#7b847d]">
+                      <Check aria-hidden="true" className="size-3.5 text-[#5f986a]" />Check original listing
+                    </span>
+                    <span className="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-[#e6e1f0] px-2.5 text-[11px] font-bold text-[#573da5]">
+                      <BookmarkCheck aria-hidden="true" className="size-3.5" />Save lead
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <p className="mt-3 text-center text-[10px] leading-4 text-[#8a928b]">Illustrative interface. This is not a live feed or real job.</p>
+            </div>
+
+            <div className="flex flex-col justify-center gap-0 p-5 sm:p-7">
+              <div className="flex gap-4 border-b border-[#e8e6df] pb-5">
+                <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[#f0edf8] text-[#6549ad]"><Search aria-hidden="true" className="size-4" /></span>
+                <div>
+                  <h3 className="text-sm font-extrabold text-[#253129]">Search relevant roles</h3>
+                  <p className="mt-1 text-sm leading-6 text-[#68736c]">Filter selected feeds by role signals, skills, and location text.</p>
+                </div>
+              </div>
+              <div className="flex gap-4 border-b border-[#e8e6df] py-5">
+                <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[#f0edf8] text-[#6549ad]"><BookmarkCheck aria-hidden="true" className="size-4" /></span>
+                <div>
+                  <h3 className="text-sm font-extrabold text-[#253129]">Save a lead</h3>
+                  <p className="mt-1 text-sm leading-6 text-[#68736c]">Keep the role and its source link in your personal opportunity list.</p>
+                </div>
+              </div>
+              <div className="flex gap-4 pt-5">
+                <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[#eaf2e9] text-[#477454]"><Send aria-hidden="true" className="size-4" /></span>
+                <div>
+                  <h3 className="text-sm font-extrabold text-[#253129]">Track your next step</h3>
+                  <p className="mt-1 text-sm leading-6 text-[#68736c]">Update the lead when you apply, or keep it for later.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -203,8 +237,8 @@ export default function HomePage() {
             <p className="text-xs font-bold uppercase tracking-[.18em] text-[#c8b9f0]">Your search deserves a system</p>
             <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-[-.045em] sm:text-4xl">Make the next application a little more intentional.</h2>
             <p className="mt-4 max-w-xl text-sm leading-6 text-white/70 sm:text-base">Create a personal workspace for discovering roles and keeping track of the ones you pursue.</p>
-            <Link href="/login?mode=sign-up" className="mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-bold text-[#35265f] transition-colors hover:bg-[#f1edf8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
-              Get started <ArrowRight aria-hidden="true" className="size-4" />
+            <Link href="/login?mode=sign-up" className="mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-white px-6 text-sm font-bold text-[#35265f] transition-colors hover:bg-[#f1edf8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+              Start your search <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           </div>
         </div>
