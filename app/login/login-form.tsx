@@ -3,11 +3,47 @@
 import { useState, type FormEvent } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { ArrowRight, Eye, EyeOff, LoaderCircle } from 'lucide-react'
+import { ArrowLeft, ArrowRight, LoaderCircle, Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { createClient } from '@/lib/supabase/client'
+
+/* ─────────────────────────────────────────────────────────────
+   Heading and subtitle copy per mode
+   Written to speak to the person, not at them.
+───────────────────────────────────────────────────────────── */
+const COPY = {
+  'sign-in': {
+    heading: 'Welcome back',
+    subtitle: 'Your saved roles and application notes are right where you left them.',
+  },
+  'sign-up': {
+    heading: 'Create your account',
+    subtitle: 'Free to use. No credit card. Just a smarter way to track your remote job search.',
+  },
+  'reset-request': {
+    heading: 'Forgot your password?',
+    subtitle: 'No worries. Enter your email and we will send a reset link straight away.',
+  },
+  'reset-password': {
+    heading: 'Choose a new password',
+    subtitle: 'Pick something you will remember. At least 8 characters does the job.',
+  },
+} as const
+
+/* ─────────────────────────────────────────────────────────────
+   Password strength indicator (sign-up only)
+───────────────────────────────────────────────────────────── */
+function getPasswordStrength(password: string): { label: string; color: string; width: string } {
+  if (password.length === 0) return { label: '', color: '', width: '0%' }
+  if (password.length < 8) return { label: 'Too short', color: 'bg-red-400', width: '25%' }
+  if (password.length < 12 && !/[^a-zA-Z0-9]/.test(password))
+    return { label: 'Fair', color: 'bg-amber-400', width: '50%' }
+  if (password.length >= 12 && /[^a-zA-Z0-9]/.test(password))
+    return { label: 'Strong', color: 'bg-emerald-500', width: '100%' }
+  return { label: 'Good', color: 'bg-[#7c3aed]', width: '75%' }
+}
 
 export function LoginForm({
   confirmationError = false,
@@ -23,9 +59,17 @@ export function LoginForm({
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [error, setError] = useState('')
   const [message, setMessage] = useState(
-    confirmationError ? 'That confirmation link could not be verified. Try signing in again or request a new confirmation email.' : '',
+    confirmationError
+      ? 'That confirmation link could not be verified. Try signing in again or request a new link.'
+      : '',
   )
   const [pending, setPending] = useState(false)
+
+  function switchMode(next: typeof mode) {
+    setMode(next)
+    setError('')
+    setMessage('')
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -42,7 +86,7 @@ export function LoginForm({
         })
 
         if (resetError) throw resetError
-        setMessage('If an account exists for this email, a password reset link has been sent.')
+        setMessage('If an account exists for this email, a reset link is on its way. Check your spam folder too.')
         return
       }
 
@@ -55,13 +99,13 @@ export function LoginForm({
         if (signOutError) {
           setMode('sign-in')
           setPassword('')
-          setError('Your password was updated, but we could not end the recovery session. Please sign out and sign in again.')
+          setError('Password updated, but we could not end the recovery session. Sign out and sign back in.')
           return
         }
 
         setMode('sign-in')
         setPassword('')
-        setMessage('Your password has been updated. Sign in with your new password.')
+        setMessage('Password updated. Sign in with your new password.')
         return
       }
 
@@ -76,7 +120,7 @@ export function LoginForm({
 
         if (signUpError) throw signUpError
         if (!data.session) {
-          setMessage('Check your inbox to confirm your email, then sign in.')
+          setMessage('Almost there. Check your inbox to confirm your email, then sign in.')
           return
         }
       } else {
@@ -86,7 +130,7 @@ export function LoginForm({
         })
 
         if (signInError?.message === 'Invalid login credentials') {
-          setError("Email or password is incorrect. Try again, reset your password, or create an account if you haven't signed up.")
+          setError("Email or password is wrong. Double-check and try again, or reset your password below.")
           return
         }
 
@@ -96,69 +140,78 @@ export function LoginForm({
       router.replace('/app')
       router.refresh()
     } catch (caughtError) {
-      setError(caughtError instanceof Error ? caughtError.message : 'Authentication failed. Please try again.')
+      setError(caughtError instanceof Error ? caughtError.message : 'Something went wrong. Please try again.')
     } finally {
       setPending(false)
     }
   }
 
+  const { heading, subtitle } = COPY[mode] ?? COPY['sign-in']
+  const passwordStrength = mode === 'sign-up' ? getPasswordStrength(password) : null
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#fbfaf7] px-4 py-10">
-      <Card className="w-full max-w-lg border-slate-200/80 bg-white shadow-sm">
-        <CardHeader className="items-center gap-5 pb-2 text-center">
-          <Image src="/gigshqicon.png" alt="" width={56} height={56} className="rounded-xl" />
-          <div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl">
-              {mode === 'sign-in'
-                ? 'Sign in to gigshq'
-                : mode === 'sign-up'
-                  ? 'Create your account'
-                  : mode === 'reset-request'
-                    ? 'Reset your password'
-                    : 'Choose a new password'}
-            </h1>
-            <p className="mt-3 text-base leading-7 text-slate-600">
-              {mode === 'reset-request'
-                ? 'Enter your account email and we will send a password reset link.'
-                : mode === 'reset-password'
-                  ? 'Choose a new password for your account.'
-                  : 'Your personal workspace for finding and organizing opportunities.'}
-            </p>
+      <Card className="w-full max-w-md border-slate-200/80 bg-white shadow-sm">
+        {/* ── Card header: logo + wordmark close together, then heading ── */}
+        <CardHeader className="items-center pb-2 pt-8 text-center">
+          {/* Logo + wordmark row */}
+          <div className="flex items-center gap-1.5">
+            <Image src="/gigshqicon.png" alt="" width={32} height={32} className="rounded-lg" />
+            <span className="text-base font-extrabold tracking-tight text-slate-900">gigshq</span>
           </div>
+
+          {/* Mode-aware heading */}
+          <h1 className="mt-5 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+            {heading}
+          </h1>
+
+          {/* Mode-aware subtitle */}
+          <p className="mt-2 max-w-xs text-sm leading-6 text-slate-500">
+            {subtitle}
+          </p>
         </CardHeader>
-        <CardContent className="px-6 pb-7 pt-6 sm:px-8">
-          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+
+        <CardContent className="px-6 pb-8 pt-6 sm:px-8">
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+
+            {/* Email field (hidden in reset-password mode) */}
             {mode !== 'reset-password' && (
-              <label className="flex flex-col gap-2 text-base font-semibold text-slate-800">
-                Email
+              <label className="flex flex-col gap-1.5 text-sm font-semibold text-slate-700">
+                Email address
                 <Input
                   type="email"
                   autoComplete="email"
                   required
                   maxLength={320}
-                  className="h-12 px-3 text-base font-medium"
+                  disabled={pending}
+                  className="h-11 border-slate-200 bg-white px-3 text-base font-medium placeholder:text-slate-400 focus:ring-[#7c3aed]/20"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="you@example.com"
                 />
               </label>
             )}
-            {mode === 'sign-in' && (
-              <button
-                type="button"
-                className="-mt-3 min-h-8 self-end text-sm font-semibold text-violet-800 underline-offset-4 hover:underline"
-                onClick={() => {
-                  setMode('reset-request')
-                  setError('')
-                  setMessage('')
-                }}
-              >
-                Forgot password?
-              </button>
-            )}
+
+            {/* Password field (hidden in reset-request mode) */}
             {mode !== 'reset-request' && (
-              <div className="flex flex-col gap-2 text-base font-semibold text-slate-800">
-                <label htmlFor="auth-password">{mode === 'reset-password' ? 'New password' : 'Password'}</label>
+              <div className="flex flex-col gap-1.5 text-sm font-semibold text-slate-700">
+                {/* Label row: password label + forgot password inline (sign-in only) */}
+                <div className="flex items-center justify-between">
+                  <label htmlFor="auth-password">
+                    {mode === 'reset-password' ? 'New password' : 'Password'}
+                  </label>
+                  {mode === 'sign-in' && (
+                    <button
+                      type="button"
+                      className="text-xs font-semibold text-[#7c3aed] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7c3aed]"
+                      onClick={() => switchMode('reset-request')}
+                    >
+                      Forgot password?
+                    </button>
+                  )}
+                </div>
+
+                {/* Password input + show/hide toggle */}
                 <span className="relative block">
                   <Input
                     id="auth-password"
@@ -167,7 +220,8 @@ export function LoginForm({
                     required
                     minLength={mode === 'sign-in' ? undefined : 8}
                     maxLength={128}
-                    className="h-12 px-3 pr-12 text-base font-medium"
+                    disabled={pending}
+                    className="h-11 border-slate-200 bg-white px-3 pr-12 text-base font-medium placeholder:text-slate-400 focus:ring-[#7c3aed]/20"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     placeholder={mode === 'sign-in' ? 'Your password' : 'At least 8 characters'}
@@ -176,22 +230,55 @@ export function LoginForm({
                     type="button"
                     aria-label={passwordVisible ? 'Hide password' : 'Show password'}
                     aria-pressed={passwordVisible}
-                    onClick={() => setPasswordVisible((visible) => !visible)}
-                    className="absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-r-lg text-slate-500 transition-colors hover:text-violet-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-700"
+                    onClick={() => setPasswordVisible((v) => !v)}
+                    className="absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-r-lg text-slate-400 transition-colors hover:text-[#7c3aed] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7c3aed]"
                   >
                     {passwordVisible
-                      ? <EyeOff aria-hidden="true" className="size-5" />
-                      : <Eye aria-hidden="true" className="size-5" />}
+                      ? <EyeOff aria-hidden="true" className="size-4" />
+                      : <Eye aria-hidden="true" className="size-4" />}
                   </button>
                 </span>
+
+                {/* Password strength bar (sign-up only) */}
+                {passwordStrength && password.length > 0 && (
+                  <div className="mt-1 flex items-center gap-2">
+                    <div className="h-1 flex-1 overflow-hidden rounded-full bg-slate-100">
+                      <div
+                        className={`h-full rounded-full transition-all duration-300 ${passwordStrength.color}`}
+                        style={{ width: passwordStrength.width }}
+                      />
+                    </div>
+                    <span className="text-xs font-medium text-slate-500">{passwordStrength.label}</span>
+                  </div>
+                )}
               </div>
             )}
-            {error && <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">{error}</p>}
-            {message && <p role="status" className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{message}</p>}
-            <Button type="submit" disabled={pending} className="mt-1 h-12 w-full text-base font-bold">
-              {pending ? <LoaderCircle aria-hidden="true" className="size-4 animate-spin" /> : <ArrowRight aria-hidden="true" data-icon="inline-end" />}
+
+            {/* Error message */}
+            {error && (
+              <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm leading-5 text-red-800">
+                {error}
+              </p>
+            )}
+
+            {/* Success / info message */}
+            {message && (
+              <p role="status" className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm leading-5 text-emerald-800">
+                {message}
+              </p>
+            )}
+
+            {/* Submit button */}
+            <Button
+              type="submit"
+              disabled={pending}
+              className="mt-1 h-11 w-full rounded-full bg-[#7c3aed] text-sm font-bold text-white hover:bg-[#6d28d9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7c3aed] disabled:opacity-60"
+            >
               {pending
-                ? 'Please wait…'
+                ? <LoaderCircle aria-hidden="true" className="mr-2 size-4 animate-spin" />
+                : <ArrowRight aria-hidden="true" className="mr-2 size-4" />}
+              {pending
+                ? 'One moment...'
                 : mode === 'sign-in'
                   ? 'Sign in'
                   : mode === 'sign-up'
@@ -201,31 +288,26 @@ export function LoginForm({
                       : 'Update password'}
             </Button>
           </form>
+
+          {/* ── Mode toggle footer ── */}
           {mode === 'sign-in' || mode === 'sign-up' ? (
-            <p className="mt-6 text-center text-base text-slate-600">
-              {mode === 'sign-in' ? 'New to gigshq?' : 'Already have an account?'}{' '}
+            <p className="mt-6 text-center text-sm text-slate-500">
+              {mode === 'sign-in' ? 'No account yet?' : 'Already signed up?'}{' '}
               <button
                 type="button"
-                className="min-h-10 font-bold text-violet-800 underline-offset-4 hover:underline"
-                onClick={() => {
-                  setMode(mode === 'sign-in' ? 'sign-up' : 'sign-in')
-                  setError('')
-                  setMessage('')
-                }}
+                className="font-semibold text-[#7c3aed] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7c3aed]"
+                onClick={() => switchMode(mode === 'sign-in' ? 'sign-up' : 'sign-in')}
               >
-                {mode === 'sign-in' ? 'Create an account' : 'Sign in'}
+                {mode === 'sign-in' ? 'Create a free account' : 'Sign in instead'}
               </button>
             </p>
           ) : (
             <button
               type="button"
-              className="mt-6 min-h-10 w-full text-center text-base font-bold text-violet-800 underline-offset-4 hover:underline"
-              onClick={() => {
-                setMode('sign-in')
-                setError('')
-                setMessage('')
-              }}
+              className="mt-5 flex w-full items-center justify-center gap-1.5 text-sm font-semibold text-slate-500 underline-offset-4 hover:text-[#7c3aed] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7c3aed]"
+              onClick={() => switchMode('sign-in')}
             >
+              <ArrowLeft aria-hidden="true" className="size-3.5" />
               Back to sign in
             </button>
           )}

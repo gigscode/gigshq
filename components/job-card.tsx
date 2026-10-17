@@ -83,7 +83,7 @@ export function JobCard({
       onClick={handleCardClick}
       onKeyDown={handleKeyDown}
       aria-label={`View details for ${job.title} at ${job.company}`}
-      className="group relative flex cursor-pointer flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_2px_12px_-4px_rgba(20,20,20,0.05)] transition-all duration-200 hover:-translate-y-1 hover:border-[#573da5]/40 hover:shadow-[0_16px_36px_-12px_rgba(87,61,165,0.18)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#573da5] active:scale-[0.99]"
+      className="group relative flex cursor-pointer flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_2px_12px_-4px_rgba(20,20,20,0.05)] transition-all duration-200 hover:-translate-y-1 hover:border-[#573da5]/40 hover:shadow-[0_16px_36px_-12px_rgba(87,61,165,0.18)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#573da5] active:scale-[0.99]"
     >
       {/* Top row: Logo, Titles, Heart */}
       <div className="flex items-start justify-between gap-3">
@@ -139,27 +139,27 @@ export function JobCard({
       </div>
 
       {/* Middle row: Colorful Pill Badges */}
-      <div className="mt-4 flex flex-wrap items-center gap-2">
+      <div className="mt-3 flex flex-wrap items-center gap-1.5">
         {/* Employment Type Pill (Lilac / Purple) */}
-        <span className="inline-flex items-center rounded-full bg-[#f3e8ff] px-3 py-1 text-xs font-semibold text-[#7e22ce] ring-1 ring-[#e9d5ff]/80">
+        <span className="inline-flex items-center rounded-full bg-[#f3e8ff] px-3 py-0.5 text-xs font-semibold text-[#7e22ce] ring-1 ring-[#e9d5ff]/80">
           {job.type}
         </span>
 
         {/* Location Pill (Mint / Teal) */}
-        <span className="inline-flex items-center gap-1 rounded-full bg-[#ecfdf5] px-3 py-1 text-xs font-semibold text-[#0f766e] ring-1 ring-[#a7f3d0]/80">
+        <span className="inline-flex items-center gap-1 rounded-full bg-[#ecfdf5] px-3 py-0.5 text-xs font-semibold text-[#0f766e] ring-1 ring-[#a7f3d0]/80">
           <MapPin aria-hidden="true" className="size-3 text-[#0d9488]" />
           {job.location}
         </span>
 
         {/* Salary / Compensation Pill (Emerald / Green) */}
-        <span className="inline-flex items-center gap-1 rounded-full bg-[#f0fdf4] px-3 py-1 text-xs font-semibold text-[#15803d] ring-1 ring-[#bbf7d0]/80">
+        <span className="inline-flex items-center gap-1 rounded-full bg-[#f0fdf4] px-3 py-0.5 text-xs font-semibold text-[#15803d] ring-1 ring-[#bbf7d0]/80">
           <DollarSign aria-hidden="true" className="size-3 text-[#16a34a]" />
           {job.salary}
         </span>
       </div>
 
       {/* Bottom row: Application status & Quick view hint */}
-      <div className="mt-4 flex items-center justify-between border-t border-slate-100/90 pt-3 text-xs">
+      <div className="mt-3 flex items-center justify-between border-t border-slate-100/90 pt-3 text-xs">
         <span className="inline-flex items-center gap-1.5 font-semibold text-[#059669]">
           <Clock aria-hidden="true" className="size-3.5" />
           {job.deadlineOrDate}

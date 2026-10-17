@@ -384,7 +384,7 @@ export default function HomePage() {
 
           {/* Subtitle speaking directly to African remote talent */}
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg sm:leading-8">
-            Landing a global remote role from Nigeria or anywhere in Africa is already tough enough. GigsHQ cuts out the guesswork—curating verified remote feeds, filtering real location eligibility, and keeping your applications organized in one personal workspace.
+            Landing a global remote role from Nigeria or anywhere in Africa is already tough enough. GigsHQ cuts out the guesswork by curating verified remote feeds, filtering real location eligibility, and keeping your applications organized in one personal workspace.
           </p>
 
           {/* Dual Pill Action Controls */}
@@ -596,12 +596,12 @@ export default function HomePage() {
       {/* ══════════════════════════════════════
           TRUST & CAPABILITY RIBBON
       ══════════════════════════════════════ */}
-      <div className="border-y border-slate-200/80 bg-white py-6">
+      <div className="border-y border-slate-200/80 bg-white py-4">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
           <p className="mb-4 text-center text-xs font-bold uppercase tracking-widest text-slate-400">
             Built for people who know the African remote job search hustle
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-center sm:gap-x-12">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-center sm:gap-x-12">
             {[
               { icon: ShieldCheck, label: 'Direct Feed Verification' },
               { icon: Compass, label: 'Curated for Africa & Global' },
@@ -609,7 +609,7 @@ export default function HomePage() {
               { icon: CheckCircle2, label: '100% Free & Transparent' },
             ].map(({ icon: Icon, label }) => (
               <div key={label} className="flex items-center gap-2 text-xs font-bold text-slate-700">
-                <div className="grid size-6 place-items-center rounded-full bg-[#f3e8ff] text-[#7c3aed]">
+                <div className="grid size-5 place-items-center rounded-full bg-[#f3e8ff] text-[#7c3aed]">
                   <Icon className="size-3.5" />
                 </div>
                 {label}
@@ -622,7 +622,7 @@ export default function HomePage() {
       {/* ══════════════════════════════════════
           FEATURE HIGHLIGHTS: "Cut out the noise. Protect your energy."
       ══════════════════════════════════════ */}
-      <section id="features" className="py-20 sm:py-28">
+      <section id="features" className="py-12 sm:py-20 lg:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 text-center">
           <span className="inline-flex items-center rounded-full bg-[#f3e8ff] px-3.5 py-1 text-xs font-bold text-[#7c3aed]">
             Built for African talent
@@ -637,7 +637,7 @@ export default function HomePage() {
 
           <div className="mt-14 grid gap-6 text-left sm:grid-cols-2">
             {/* Card 1: Real Location Signals */}
-            <div className="flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-7 shadow-xs sm:p-9 transition-all hover:shadow-md">
+            <div className="flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-5 shadow-xs sm:p-9 transition-all hover:shadow-md">
               <div>
                 <div className="grid size-12 place-items-center rounded-2xl bg-[#7c3aed] text-white shadow-xs">
                   <Compass className="size-6" />
@@ -662,7 +662,7 @@ export default function HomePage() {
             </div>
 
             {/* Card 2: Consolidated Feeds */}
-            <div className="flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-7 shadow-xs sm:p-9 transition-all hover:shadow-md">
+            <div className="flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-5 shadow-xs sm:p-9 transition-all hover:shadow-md">
               <div>
                 <div className="grid size-12 place-items-center rounded-2xl bg-[#7c3aed] text-white shadow-xs">
                   <FolderKanban className="size-6" />
@@ -705,7 +705,7 @@ export default function HomePage() {
                 </span>
               </div>
               <p className="mt-1.5 text-sm font-medium text-slate-500 sm:text-base">
-                2,020 remote roles curated — updated daily from verified feeds. Click any role to preview requirements before applying.
+                2,020 remote roles curated, updated daily from verified feeds. Click any role to preview requirements before applying.
               </p>
             </div>
             <Link
@@ -730,7 +730,7 @@ export default function HomePage() {
                   key={id}
                   type="button"
                   onClick={() => handleCategoryChange(id)}
-                  className={`rounded-full px-4 py-1.5 text-xs font-bold transition-all duration-200 focus-visible:outline-2 focus-visible:outline-[#7c3aed] ${
+                  className={`rounded-full px-3 py-1 text-xs font-bold transition-all duration-200 focus-visible:outline-2 focus-visible:outline-[#7c3aed] ${
                     active
                       ? 'bg-[#7c3aed] text-white shadow-xs'
                       : 'border border-slate-200/80 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50'
@@ -777,7 +777,7 @@ export default function HomePage() {
       {/* ══════════════════════════════════════
           HOW IT WORKS (OPTION A: INTERACTIVE MICRO-UI PIPELINE CARDS)
       ══════════════════════════════════════ */}
-      <section id="how-it-works" className="border-t border-slate-200/80 bg-slate-50/50 px-5 py-20 sm:px-8 sm:py-28 lg:px-12">
+      <section id="how-it-works" className="border-t border-slate-200/80 bg-slate-50/50 px-5 py-12 sm:px-8 sm:py-20 lg:px-12 lg:py-28">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-2xl text-center">
             <span className="inline-flex items-center rounded-full bg-[#f3e8ff] px-3.5 py-1 text-xs font-bold text-[#7c3aed]">
@@ -842,7 +842,7 @@ export default function HomePage() {
                   Save the lead before you lose it
                 </h3>
                 <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                  Internet cuts out, power flickers, or you spot a role while commuting. Tap the heart to stash the listing and direct source link into your personal pipeline—no more 40 lost browser tabs.
+                  Internet cuts out, power flickers, or you spot a role while commuting. Tap the heart to stash the listing and direct source link into your personal pipeline. No more 40 lost browser tabs.
                 </p>
               </div>
 
