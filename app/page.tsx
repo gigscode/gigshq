@@ -8,109 +8,119 @@ import {
   BookmarkCheck,
   BriefcaseBusiness,
   Check,
+  CheckCircle2,
   ChevronDown,
+  ChevronRight,
+  Compass,
+  FolderKanban,
   Globe,
+  Heart,
   MapPin,
+  Play,
   Search,
   Send,
-  Sparkles,
-  Zap,
+  ShieldCheck,
+  Target,
+  TrendingUp,
 } from 'lucide-react'
 import { JobCard, JobDetailModal, type JobCardData } from '@/components/job-card'
 
 /* ─────────────────────────────────────────
-   Sticky-nav: applies a translucent backdrop
-   once the user scrolls past the fold a bit.
+   Sticky-nav: Floating rounded island
 ───────────────────────────────────────── */
 function NavBar() {
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
+    const onScroll = () => setScrolled(window.scrollY > 20)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
-    <header
-      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
-        scrolled
-          ? 'border-b border-[#e8e6df]/80 bg-[#fbfaf7]/90 backdrop-blur-md shadow-[0_1px_0_0_rgba(0,0,0,.04)]'
-          : 'bg-transparent'
-      }`}
-    >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-12">
-        <Link href="/" aria-label="GigsHQ home" className="group flex items-center gap-2.5">
+    <div className="sticky top-4 z-50 mx-auto w-full max-w-5xl px-4 sm:px-6">
+      <header
+        className={`flex items-center justify-between rounded-full border border-slate-200/90 bg-white/85 px-4 py-2.5 shadow-lg shadow-slate-900/5 backdrop-blur-md transition-all duration-300 sm:px-6 ${
+          scrolled ? 'border-slate-300/80 bg-white/95 shadow-md' : 'bg-white/85'
+        }`}
+      >
+        {/* Closed gap between logo icon and text */}
+        <Link href="/" aria-label="GigsHQ home" className="group flex items-center gap-1.5">
           <Image
             src="/gigshqicon.png"
             alt=""
-            width={36}
-            height={36}
+            width={30}
+            height={30}
             className="rounded-xl transition-transform group-hover:scale-105"
             priority
           />
-          <span className="text-[1.1rem] font-extrabold tracking-tight text-[#18231f]">
-            gigs<span className="text-[#573da5]">hq</span>
+          <span className="text-[1.1rem] font-extrabold tracking-tight text-slate-900">
+            gigs<span className="text-[#7c3aed]">hq</span>
           </span>
         </Link>
 
-        <nav aria-label="Main navigation" className="flex items-center gap-2 sm:gap-6">
+        <nav aria-label="Main navigation" className="flex items-center gap-3 sm:gap-6">
           <a
             href="#how-it-works"
-            className="hidden text-sm font-semibold text-[#56615c] transition-colors hover:text-[#18231f] sm:inline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#573da5] rounded"
+            className="hidden text-xs font-semibold text-slate-600 transition-colors hover:text-slate-900 sm:inline focus-visible:outline-2 focus-visible:outline-[#7c3aed] rounded"
           >
             How it works
           </a>
           <a
+            href="#features"
+            className="hidden text-xs font-semibold text-slate-600 transition-colors hover:text-slate-900 md:inline focus-visible:outline-2 focus-visible:outline-[#7c3aed] rounded"
+          >
+            Features
+          </a>
+          <a
             href="#latest-jobs"
-            className="hidden text-sm font-semibold text-[#56615c] transition-colors hover:text-[#18231f] md:inline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#573da5] rounded"
+            className="hidden text-xs font-semibold text-slate-600 transition-colors hover:text-slate-900 md:inline focus-visible:outline-2 focus-visible:outline-[#7c3aed] rounded"
           >
             Latest jobs
           </a>
           <a
             href="#transparency"
-            className="hidden text-sm font-semibold text-[#56615c] transition-colors hover:text-[#18231f] lg:inline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#573da5] rounded"
+            className="hidden text-xs font-semibold text-slate-600 transition-colors hover:text-slate-900 lg:inline focus-visible:outline-2 focus-visible:outline-[#7c3aed] rounded"
           >
             Transparency
           </a>
           <Link
             href="/login"
-            className="text-sm font-semibold text-[#56615c] transition-colors hover:text-[#18231f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#573da5] rounded px-1"
+            className="text-xs font-semibold text-slate-600 transition-colors hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-[#7c3aed] rounded px-1"
           >
             Sign in
           </Link>
           <Link
             href="/login?mode=sign-up"
-            className="inline-flex min-h-[2.4rem] items-center gap-1.5 rounded-xl bg-[#573da5] px-4 text-sm font-bold text-white shadow-[0_4px_14px_-4px_rgba(87,61,165,.6)] transition-all hover:-translate-y-px hover:bg-[#463087] hover:shadow-[0_6px_18px_-4px_rgba(87,61,165,.7)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#573da5]"
+            className="inline-flex min-h-[2.35rem] items-center gap-1.5 rounded-full bg-[#7c3aed] px-4.5 text-xs font-bold text-white shadow-xs transition-all hover:-translate-y-px hover:bg-[#6d28d9] hover:shadow-[0_6px_18px_-3px_rgba(124,58,237,0.6)] focus-visible:outline-2 focus-visible:outline-[#7c3aed]"
           >
-            Get started <ArrowRight aria-hidden="true" className="size-3.5" />
+            Get started <ArrowRight aria-hidden="true" className="size-3" />
           </Link>
         </nav>
-      </div>
-    </header>
+      </header>
+    </div>
   )
 }
 
 /* ─────────────────────────────────────────
    Accordion item for the FAQ / Transparency
-   section. Keyboard & mouse accessible.
 ───────────────────────────────────────── */
 function FaqItem({ question, answer }: { question: string; answer: string }) {
   const [open, setOpen] = useState(false)
   const id = `faq-${question.slice(0, 20).replace(/\s/g, '-').toLowerCase()}`
 
   return (
-    <div className="border-b border-[#e8e6df] last:border-0">
+    <div className="border-b border-slate-200/80 last:border-0">
       <button
         aria-expanded={open}
         aria-controls={id}
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-start justify-between gap-4 py-5 text-left transition-colors hover:text-[#573da5] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#573da5] rounded"
+        className="flex w-full items-start justify-between gap-4 py-5 text-left transition-colors hover:text-[#7c3aed] focus-visible:outline-2 focus-visible:outline-[#7c3aed] rounded"
       >
-        <span className="text-sm font-bold text-[#253129]">{question}</span>
+        <span className="text-sm font-bold text-slate-900 sm:text-base">{question}</span>
         <ChevronDown
           aria-hidden="true"
-          className={`mt-0.5 size-5 shrink-0 text-[#6549ad] transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          className={`mt-0.5 size-5 shrink-0 text-[#7c3aed] transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         />
       </button>
       <div
@@ -119,14 +129,14 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
         aria-labelledby={id}
         className={`overflow-hidden transition-all duration-200 ${open ? 'max-h-48 pb-5' : 'max-h-0'}`}
       >
-        <p className="text-sm leading-7 text-[#68736c]">{answer}</p>
+        <p className="text-sm leading-relaxed text-slate-600">{answer}</p>
       </div>
     </div>
   )
 }
 
 /* ─────────────────────────────────────────
-   Sample Curated Jobs (Matching Reference Design & Clickable)
+   Curated Job Listings Data
 ───────────────────────────────────────── */
 const allCuratedJobs: JobCardData[] = [
   {
@@ -141,7 +151,7 @@ const allCuratedJobs: JobCardData[] = [
     salary: '$450 - $500 / month',
     deadlineOrDate: '56 days left to apply',
     skills: ['Figma', 'Webflow CMS', 'UI Systems', 'Interaction Design', 'Responsive Prototyping'],
-    description: 'Webflow is seeking a UI/UX Designer to craft world-class web experiences, responsive page components, and modern interactive modules for global customers.',
+    description: 'Webflow is seeking a UI/UX Designer to craft responsive web components and interactive modules for global customers.',
     responsibilities: [
       'Design clean, accessible web components and interface layouts in Figma and Webflow.',
       'Work alongside marketing and engineering teams on high-impact web initiatives.',
@@ -160,7 +170,7 @@ const allCuratedJobs: JobCardData[] = [
     salary: '$450 - $500 / month',
     deadlineOrDate: '56 days left to apply',
     skills: ['Visual Design', 'Web Apps', 'Design Systems', 'Micro-interactions', 'User Testing'],
-    description: 'Canva is expanding its core creative tooling and seeking a talented web designer to shape responsive user workflows and creative canvas interfaces.',
+    description: 'Canva is expanding its core creative tooling and seeking a talented web designer to shape responsive user workflows.',
     responsibilities: [
       'Create polished user journey prototypes and interactive micro-animations.',
       'Collaborate with remote product engineers across international time zones.',
@@ -179,7 +189,7 @@ const allCuratedJobs: JobCardData[] = [
     salary: '$450 - $500 / month',
     deadlineOrDate: '56 days left to apply',
     skills: ['Enterprise UX', 'Design Thinking', 'Accessibility (WCAG)', 'Information Architecture'],
-    description: 'Join Aon’s remote digital product team to simplify complex enterprise risk analysis workflows into modern, intuitive user interfaces.',
+    description: 'Join Aon’s remote digital product team to simplify complex enterprise risk analysis workflows into intuitive user interfaces.',
     responsibilities: [
       'Translate data-heavy risk reports into responsive, readable dashboards.',
       'Establish enterprise WCAG AA accessibility standards across customer portals.',
@@ -198,7 +208,7 @@ const allCuratedJobs: JobCardData[] = [
     salary: '$450 - $500 / month',
     deadlineOrDate: '56 days left to apply',
     skills: ['Figma', 'Design Systems', 'Product Design', 'Collaboration Tools', 'Typography'],
-    description: 'Slack is hiring a UI/UX Web Designer to focus on productivity surfaces, desktop web integration, and customer onboarding journeys.',
+    description: 'Slack is hiring a UI/UX Web Designer to focus on productivity surfaces and customer onboarding journeys.',
     responsibilities: [
       'Prototype new interaction patterns for asynchronous communication tools.',
       'Enhance design system documentation and reusable component libraries.',
@@ -217,7 +227,7 @@ const allCuratedJobs: JobCardData[] = [
     salary: '$5,500 - $7,000 / month',
     deadlineOrDate: '42 days left to apply',
     skills: ['React', 'TypeScript', 'Tailwind CSS', 'Web Performance', 'State Management'],
-    description: 'Linear is looking for a thoughtful frontend engineer who obsesses over keyboard navigation, sub-100ms interactions, and rock-solid web architecture.',
+    description: 'Linear is looking for a thoughtful frontend engineer who obsesses over keyboard navigation and sub-100ms interactions.',
     responsibilities: [
       'Build snappy, offline-first client interfaces using React and TypeScript.',
       'Optimize rendering pipelines and keyboard shortcuts for lightning-fast issue tracking.',
@@ -236,7 +246,7 @@ const allCuratedJobs: JobCardData[] = [
     salary: '$4,800 - $6,500 / month',
     deadlineOrDate: '30 days left to apply',
     skills: ['Next.js', 'PostgreSQL', 'TypeScript', 'Auth Systems', 'REST & GraphQL'],
-    description: 'Supabase empowers developers to build faster. We are seeking a full-stack engineer in Africa to develop dashboard features and developer tools.',
+    description: 'Supabase empowers developers to build faster. We are seeking a full-stack engineer in Africa to develop dashboard features.',
     responsibilities: [
       'Develop cloud database dashboard management views and analytics charts.',
       'Maintain reliable API endpoints and database migration scripts.',
@@ -255,7 +265,7 @@ const allCuratedJobs: JobCardData[] = [
     salary: '$4,000 - $5,500 / month',
     deadlineOrDate: '24 days left to apply',
     skills: ['Product Messaging', 'Launch Strategy', 'SaaS Growth', 'Content Strategy'],
-    description: 'Buffer is an all-remote pioneer looking for a passionate product marketer to drive feature adoption, product launches, and narrative positioning.',
+    description: 'Buffer is an all-remote pioneer looking for a passionate product marketer to drive feature adoption and product launches.',
     responsibilities: [
       'Formulate go-to-market strategies for quarterly product releases.',
       'Craft compelling customer case studies, release notes, and email briefings.',
@@ -281,86 +291,10 @@ const allCuratedJobs: JobCardData[] = [
       'Contribute to open-source WordPress core projects and theme repositories.',
     ],
   },
-  {
-    id: 'job-9',
-    title: 'Email & Klaviyo Strategist',
-    company: 'DTC Brands',
-    category: 'Marketing',
-    logoBg: 'bg-rose-500',
-    logoText: 'K',
-    type: 'Contract',
-    location: 'Remote · Worldwide',
-    salary: '$3,500 - $4,800 / month',
-    deadlineOrDate: '35 days left to apply',
-    skills: ['Klaviyo', 'Email Automation', 'Copywriting', 'A/B Testing', 'Retention'],
-    description: 'Lead retention and lifecycle marketing for high-growth e-commerce brands utilizing advanced Klaviyo flows and segmentation.',
-    responsibilities: [
-      'Architect automated customer journeys (welcome series, win-backs, abandoned carts).',
-      'Conduct rigorous split-tests on subject lines, creative templates, and send times.',
-      'Report on monthly attribution, open rates, and customer lifetime value.',
-    ],
-  },
-  {
-    id: 'job-10',
-    title: 'Technical Content Writer',
-    company: 'Stripe',
-    category: 'Content',
-    logoBg: 'bg-violet-700',
-    logoText: 'S',
-    type: 'Full Time',
-    location: 'Remote · Worldwide',
-    salary: '$4,500 - $6,000 / month',
-    deadlineOrDate: '29 days left to apply',
-    skills: ['Technical Writing', 'API Documentation', 'Developer Guides', 'Code Samples'],
-    description: 'Help global developers integrate financial infrastructure by authoring clear, concise guides, reference documentation, and interactive tutorials.',
-    responsibilities: [
-      'Author developer-first tutorials for modern payment integrations.',
-      'Review engineering pull requests for technical clarity and documentation quality.',
-      'Maintain developer API reference changelogs and SDK migration notes.',
-    ],
-  },
-  {
-    id: 'job-11',
-    title: 'Brand & Visual Designer',
-    company: 'Figma',
-    category: 'Design',
-    logoBg: 'bg-gradient-to-tr from-rose-500 via-purple-500 to-blue-500',
-    logoText: 'F',
-    type: 'Full Time',
-    location: 'Remote · Worldwide',
-    salary: '$5,000 - $7,000 / month',
-    deadlineOrDate: '48 days left to apply',
-    skills: ['Brand Identity', 'Illustration', 'Figma', 'Motion Design', 'Typography'],
-    description: 'Figma is hiring a Visual Designer to shape brand campaign assets, community event graphics, and interactive web landing pages.',
-    responsibilities: [
-      'Develop expressive visual identities for product feature announcements.',
-      'Collaborate with content strategists on compelling visual storytelling.',
-      'Maintain an organized digital asset library for global marketing campaigns.',
-    ],
-  },
-  {
-    id: 'job-12',
-    title: 'Customer Onboarding Lead',
-    company: 'Loom',
-    category: 'Support',
-    logoBg: 'bg-amber-500',
-    logoText: 'L',
-    type: 'Full Time',
-    location: 'Remote · Africa & EU',
-    salary: '$3,800 - $5,000 / month',
-    deadlineOrDate: '21 days left to apply',
-    skills: ['Customer Success', 'Technical Support', 'Onboarding Funnels', 'Async Video'],
-    description: 'Guide new enterprise teams to successfully implement asynchronous video messaging across their organizations.',
-    responsibilities: [
-      'Lead interactive onboarding webinars and product walkthroughs.',
-      'Create step-by-step help center articles and video explainers.',
-      'Gather user feedback to advocate for customer-requested product enhancements.',
-    ],
-  },
 ]
 
 /* ─────────────────────────────────────────
-   Main page
+   Main Landing Page Component
 ───────────────────────────────────────── */
 export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState<string>('all')
@@ -369,13 +303,13 @@ export default function HomePage() {
   const [savedJobIds, setSavedJobIds] = useState<Set<string>>(new Set())
   const [toastMessage, setToastMessage] = useState<string | null>(null)
 
-  // Filter jobs by selected category tab
+  // Filter jobs by category
   const filteredJobs = allCuratedJobs.filter((job) => {
     if (activeCategory === 'all') return true
     return job.category.toLowerCase() === activeCategory.toLowerCase()
   })
 
-  // Paginate 4 cards per page (matching 2x2 grid in reference design)
+  // 4 cards per page (2x2 grid matching reference)
   const pageSize = 4
   const totalPages = Math.max(1, Math.ceil(filteredJobs.length / pageSize))
   const displayedJobs = filteredJobs.slice(
@@ -383,216 +317,302 @@ export default function HomePage() {
     (activePage + 1) * pageSize
   )
 
-  // When category changes, reset to page 0
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category)
     setActivePage(0)
   }
 
-  // Handle saving a job with reactive feedback
   const handleSaveToggle = (id: string, saved: boolean) => {
     setSavedJobIds((prev) => {
       const next = new Set(prev)
-      if (saved) {
-        next.add(id)
-      } else {
-        next.delete(id)
-      }
+      if (saved) next.add(id)
+      else next.delete(id)
       return next
     })
 
     const targetJob = allCuratedJobs.find((j) => j.id === id)
     if (saved && targetJob) {
-      setToastMessage(`✨ Saved "${targetJob.title}" at ${targetJob.company} to your leads`)
-      setTimeout(() => setToastMessage(null), 4500)
+      setToastMessage(`Saved "${targetJob.title}" at ${targetJob.company} to your leads`)
+      setTimeout(() => setToastMessage(null), 4000)
     }
   }
 
   return (
-    <div className="overflow-hidden bg-[#fbfaf7] text-[#18231f]">
+    <div className="min-h-screen bg-[#fcfbfa] text-slate-900 selection:bg-[#7c3aed]/15 selection:text-[#7c3aed]">
       <NavBar />
 
       {/* ══════════════════════════════════════
-          HERO
+          HERO SECTION (Centered Composition with Human Empathy)
       ══════════════════════════════════════ */}
-      <section className="relative mx-auto grid max-w-7xl gap-14 px-5 pb-20 pt-10 sm:px-8 sm:pb-28 sm:pt-14 lg:grid-cols-[1fr_.92fr] lg:items-center lg:gap-10 lg:px-12 lg:pb-32 lg:pt-16">
-
-        {/* Background decoration */}
+      <section className="relative overflow-hidden pt-10 pb-20 sm:pt-16 sm:pb-28 lg:pt-20 lg:pb-32">
+        {/* Soft atmospheric ambient glow */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -left-40 -top-10 size-[34rem] rounded-full bg-gradient-to-br from-[#e8e4f5]/60 to-[#d9f0d9]/30 blur-3xl"
+          className="pointer-events-none absolute inset-x-0 -top-24 h-96 bg-gradient-to-b from-[#f3e8ff]/70 via-[#fcfbfa]/40 to-transparent"
         />
+
+        {/* Geometric dot matrix accent */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute right-1/3 top-1/2 size-80 rounded-full bg-[#e8e4f5]/20 blur-3xl"
-        />
+          className="pointer-events-none absolute right-8 top-12 hidden opacity-40 lg:block"
+        >
+          <svg width="80" height="80" fill="none" viewBox="0 0 80 80">
+            <circle cx="10" cy="10" r="2" fill="#7c3aed" />
+            <circle cx="30" cy="10" r="2" fill="#7c3aed" />
+            <circle cx="50" cy="10" r="2" fill="#7c3aed" />
+            <circle cx="70" cy="10" r="2" fill="#7c3aed" />
+            <circle cx="10" cy="30" r="2" fill="#7c3aed" />
+            <circle cx="30" cy="30" r="2" fill="#7c3aed" />
+            <circle cx="50" cy="30" r="2" fill="#7c3aed" />
+            <circle cx="70" cy="30" r="2" fill="#7c3aed" />
+            <circle cx="10" cy="50" r="2" fill="#7c3aed" />
+            <circle cx="30" cy="50" r="2" fill="#7c3aed" />
+            <circle cx="50" cy="50" r="2" fill="#7c3aed" />
+            <circle cx="70" cy="50" r="2" fill="#7c3aed" />
+            <circle cx="10" cy="70" r="2" fill="#7c3aed" />
+            <circle cx="30" cy="70" r="2" fill="#7c3aed" />
+            <circle cx="50" cy="70" r="2" fill="#7c3aed" />
+            <circle cx="70" cy="70" r="2" fill="#7c3aed" />
+          </svg>
+        </div>
 
-        {/* Left — copy */}
-        <div className="relative z-10 max-w-2xl">
-          {/* Status badge */}
-          <div className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-[#ddd8ec] bg-white/80 px-4 py-2 text-xs font-bold tracking-wide text-[#573da5] shadow-sm backdrop-blur-sm">
-            <span className="relative flex size-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#6aab78] opacity-75 [animation-duration:2s]" />
-              <span className="relative inline-flex size-2 rounded-full bg-[#6aab78]" />
-            </span>
-            A job-search workspace built for Africa&rsquo;s remote-work journey
-          </div>
-
-          <h1 className="max-w-2xl text-[clamp(3rem,7vw,5.5rem)] font-extrabold leading-[.98] tracking-[-0.06em] text-[#17231e]">
-            Find your next<br />
-            remote role.{' '}
-            <span className="relative inline-block text-[#6549ad]">
-              Keep the{' '}
-              <span
-                aria-hidden="true"
-                className="absolute bottom-[0.06em] left-0 h-[0.1em] w-full rounded-full bg-[#6549ad]/20"
-              />
-              search moving.
-            </span>
+        <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 text-center">
+          {/* Centered Headline with vibrant color-accented font */}
+          <h1 className="mx-auto max-w-4xl text-[clamp(2.75rem,6.5vw,5.25rem)] font-extrabold leading-[1.04] tracking-[-0.045em] text-slate-900">
+            Take control of your <span className="text-[#7c3aed]">remote career</span>
           </h1>
 
-          <p className="mt-6 max-w-lg text-base leading-7 text-[#58635d] sm:text-lg sm:leading-8">
-            Discover remote digital opportunities, save the ones worth pursuing, and keep your applications organized — all in one personal workspace.
+          {/* Subtitle speaking directly to African remote talent */}
+          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg sm:leading-8">
+            Landing a global remote role from Nigeria or anywhere in Africa is already tough enough. GigsHQ cuts out the guesswork—curating verified remote feeds, filtering real location eligibility, and keeping your applications organized in one personal workspace.
           </p>
 
-          {/* CTAs */}
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+          {/* Dual Pill Action Controls */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5 sm:mt-9">
             <Link
               href="/login?mode=sign-up"
-              className="inline-flex min-h-[3rem] items-center justify-center gap-2 rounded-xl bg-[#573da5] px-7 text-sm font-bold text-white shadow-[0_12px_28px_-10px_rgba(87,61,165,.75)] transition-all hover:-translate-y-0.5 hover:bg-[#463087] hover:shadow-[0_16px_32px_-10px_rgba(87,61,165,.8)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#573da5]"
+              className="inline-flex min-h-[3.15rem] items-center justify-center gap-2 rounded-full bg-[#7c3aed] px-8 text-sm font-bold text-white shadow-[0_12px_28px_-6px_rgba(124,58,237,0.55)] transition-all hover:-translate-y-0.5 hover:bg-[#6d28d9] hover:shadow-[0_16px_32px_-6px_rgba(124,58,237,0.65)] focus-visible:outline-2 focus-visible:outline-[#7c3aed]"
             >
-              Start your search <ArrowRight aria-hidden="true" className="size-4" />
+              Start searching free <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
+
             <a
               href="#latest-jobs"
-              className="inline-flex min-h-[3rem] items-center justify-center gap-2 rounded-xl px-5 text-sm font-bold text-[#38443e] ring-1 ring-[#e4e1d9] transition-all hover:bg-white hover:ring-[#cac7c0] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#573da5]"
+              className="inline-flex min-h-[3.15rem] items-center justify-center gap-2.5 rounded-full border border-slate-200/90 bg-white/95 px-7 text-sm font-bold text-slate-700 shadow-2xs backdrop-blur-xs transition-all hover:border-slate-300 hover:bg-white focus-visible:outline-2 focus-visible:outline-[#7c3aed]"
             >
-              Explore latest jobs
+              <Play aria-hidden="true" className="size-3.5 fill-[#7c3aed] text-[#7c3aed]" />
+              Explore latest roles
             </a>
           </div>
 
-          <p className="mt-5 max-w-lg text-xs leading-5 text-[#8a938d]">
-            Location filters are a starting point, not an eligibility guarantee. Always confirm requirements with the employer.
+          <p className="mt-4 text-xs font-medium text-slate-400">
+            Honest location text matching · No subscription required to search
           </p>
 
-          {/* Stats strip */}
-          <div className="mt-10 flex flex-wrap gap-6 border-t border-[#e8e6df] pt-8">
-            {[
-              { label: 'Remote-first feeds', value: 'Curated' },
-              { label: 'Application tracker', value: 'Built-in' },
-              { label: 'Free to use', value: 'Always' },
-            ].map(({ label, value }) => (
-              <div key={label} className="flex flex-col gap-0.5">
-                <span className="text-lg font-extrabold tracking-tight text-[#17231e]">
-                  {value}
+          {/* ══════════════════════════════════════
+              3-PIECE VISUAL STAGE (Center Phone + Left & Right Floating Cards)
+          ══════════════════════════════════════ */}
+          <div className="relative mx-auto mt-14 max-w-5xl sm:mt-18">
+
+            {/* Left Floating Card: Recent Leads + Handwritten Callout */}
+            <div className="hidden lg:block absolute -left-4 top-12 z-20 w-72 text-left animate-in fade-in slide-in-from-left-4 duration-500">
+              <div className="mb-2.5 flex items-center gap-2 pl-4">
+                <span className="font-serif italic text-sm font-semibold tracking-wide text-[#7c3aed]">
+                  Curated daily, never generic
                 </span>
-                <span className="text-xs text-[#8a938d]">{label}</span>
+                <svg className="size-7 text-[#7c3aed]" fill="none" viewBox="0 0 32 32">
+                  <path
+                    d="M6 8 C 14 14, 22 18, 26 24 M 26 24 L 20 23 M 26 24 L 24 18"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* Right — Interactive UI mock with Clickable JobCard */}
-        <div className="relative z-10 mx-auto w-full max-w-[540px] lg:ml-auto">
-          {/* Decorative rings */}
-          <div
-            aria-hidden="true"
-            className="absolute -right-6 -top-8 size-36 rounded-full border border-[#d5e2d5]/60 sm:-right-10 sm:-top-12 sm:size-52"
-          />
-          <div
-            aria-hidden="true"
-            className="absolute -bottom-6 -left-6 size-28 rounded-full bg-[#e8eee4]/70 sm:-bottom-10 sm:-left-10 sm:size-40"
-          />
-          {/* Floating tag — workspace type */}
-          <div
-            aria-hidden="true"
-            className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 rounded-full border border-[#ddd8ec] bg-white/95 px-4 py-2 text-xs font-bold text-[#573da5] shadow-sm backdrop-blur-sm sm:-top-5"
-          >
-            <Sparkles className="size-3.5" aria-hidden="true" />
-            Your personal opportunity workspace
-          </div>
-
-          {/* Card shell */}
-          <div className="relative mt-6 rounded-[1.75rem] border border-[#e6e3dc] bg-white shadow-[0_32px_80px_-36px_rgba(37,46,39,.40)] sm:rounded-[2rem]">
-
-            {/* Card header */}
-            <div className="flex items-center justify-between border-b border-[#eeece7] px-5 py-4">
-              <div>
-                <p className="text-[0.7rem] font-extrabold uppercase tracking-[.18em] text-[#69746d]">Opportunity workspace</p>
-                <p className="mt-0.5 text-sm font-bold text-[#202c26]">Your search, in one place</p>
-              </div>
-              <span className="rounded-full bg-[#f0edf8] px-3 py-1.5 text-xs font-bold text-[#573da5]">Personal</span>
-            </div>
-
-            {/* Tabs */}
-            <div className="grid grid-cols-3 gap-2 p-4">
-              {[
-                { icon: Search, label: 'Discover', active: true },
-                { icon: BookmarkCheck, label: 'Saved leads', active: false },
-                { icon: BriefcaseBusiness, label: 'Track', active: false },
-              ].map(({ icon: Icon, label, active }) => (
-                <div
-                  key={label}
-                  aria-hidden="true"
-                  className={`flex items-center justify-center gap-1.5 rounded-xl border px-2 py-3 text-xs font-bold sm:gap-2 ${
-                    active
-                      ? 'border-[#ded7f0] bg-[#f6f3fb] text-[#573da5]'
-                      : 'border-[#eeece7] bg-[#fdfdfc] text-[#66716a]'
-                  }`}
-                >
-                  <Icon aria-hidden="true" className="size-3.5" />
-                  {label}
+              <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-xl backdrop-blur-md">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                  <span className="text-xs font-bold text-slate-800">Recent Leads</span>
+                  <span className="text-[0.7rem] font-bold text-[#7c3aed]">3 saved</span>
                 </div>
-              ))}
+
+                <div className="mt-3 space-y-2.5">
+                  {[
+                    { company: 'Webflow', role: 'UI/UX Designer', pay: '$500/mo', color: 'bg-[#4353ff]' },
+                    { company: 'Linear', role: 'Frontend Engineer', pay: '$6,500/mo', color: 'bg-indigo-600' },
+                    { company: 'Canva', role: 'Product Designer', pay: '$5,000/mo', color: 'bg-amber-500' },
+                  ].map((item) => (
+                    <div
+                      key={item.company}
+                      onClick={() => setSelectedJob(allCuratedJobs[0])}
+                      className="group flex cursor-pointer items-center justify-between rounded-xl border border-slate-100 bg-slate-50/70 p-2.5 transition-all hover:bg-violet-50/50 hover:border-violet-200"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className={`grid size-7 shrink-0 place-items-center rounded-lg text-xs font-bold text-white ${item.color}`}>
+                          {item.company.charAt(0)}
+                        </div>
+                        <div className="min-w-0 truncate">
+                          <p className="truncate text-xs font-bold text-slate-800 group-hover:text-[#7c3aed]">{item.role}</p>
+                          <p className="text-[0.68rem] text-slate-500">{item.company}</p>
+                        </div>
+                      </div>
+                      <span className="text-xs font-bold text-emerald-600 shrink-0">{item.pay}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            {/* Search bar */}
-            <div className="mx-4 mb-3 rounded-2xl bg-[#f6f7f3] p-3.5">
-              <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                <p className="text-xs font-bold text-[#29352e]">A focused search</p>
-                <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#56615c]">
-                  <Globe aria-hidden="true" className="size-3 text-[#6549ad]" />
-                  Nigeria · Africa · Worldwide
+            {/* Right Floating Card: Weekly Goal Target + Handwritten Callout */}
+            <div className="hidden lg:block absolute -right-4 top-16 z-20 w-72 text-left animate-in fade-in slide-in-from-right-4 duration-500">
+              <div className="mb-2.5 flex items-center justify-end gap-2 pr-4">
+                <svg className="size-7 text-[#7c3aed]" fill="none" viewBox="0 0 32 32">
+                  <path
+                    d="M26 8 C 18 14, 10 18, 6 24 M 6 24 L 12 23 M 6 24 L 8 18"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span className="font-serif italic text-sm font-semibold tracking-wide text-[#7c3aed]">
+                  Every step organized
                 </span>
               </div>
-              <div className="flex items-center gap-2 rounded-lg border border-[#e7e8e2] bg-white px-3 py-2.5">
-                <Search aria-hidden="true" className="size-3.5 shrink-0 text-[#879088]" />
-                <span className="text-xs text-[#69746d]">Role, skill, or company…</span>
+
+              <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xl backdrop-blur-md">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                  <span className="text-xs font-bold text-slate-800">Weekly Goal</span>
+                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[0.68rem] font-bold text-emerald-700">
+                    On track
+                  </span>
+                </div>
+
+                <div className="mt-4 flex items-center gap-4">
+                  <div className="relative grid size-16 shrink-0 place-items-center">
+                    <svg className="size-full -rotate-90" viewBox="0 0 36 36">
+                      <path
+                        className="text-slate-100"
+                        strokeWidth="3.5"
+                        stroke="currentColor"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <path
+                        className="text-[#7c3aed]"
+                        strokeDasharray="68, 100"
+                        strokeLinecap="round"
+                        strokeWidth="3.5"
+                        stroke="currentColor"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                    </svg>
+                    <span className="absolute text-sm font-extrabold text-slate-900">68%</span>
+                  </div>
+
+                  <div>
+                    <p className="text-xs font-bold text-slate-800">Application Sprint</p>
+                    <p className="mt-0.5 text-xs text-slate-500">4 of 6 submitted</p>
+                    <p className="mt-1 text-[0.7rem] font-semibold text-emerald-600">Next: Linear follow-up</p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Clickable Job Card in Hero */}
-            <div className="mx-4 mb-4">
-              <JobCard
-                job={allCuratedJobs[0]}
-                initiallySaved={savedJobIds.has(allCuratedJobs[0].id)}
-                onSaveToggle={handleSaveToggle}
-                onClick={(job) => setSelectedJob(job)}
-              />
-            </div>
+            {/* Center Device Frame (Phone Mockup) */}
+            <div className="relative mx-auto w-full max-w-[340px] sm:max-w-[360px]">
+              <div className="relative rounded-[2.75rem] border-[7px] border-slate-900 bg-white p-3 shadow-[0_30px_70px_-20px_rgba(15,23,42,0.35)]">
+                <div className="mx-auto mb-3 h-4 w-24 rounded-full bg-slate-900" />
 
-            <p className="px-4 pb-4 pt-0 text-center text-[0.72rem] font-semibold text-[#573da5]">
-              👉 Click card to open full role preview · Click heart to save lead
-            </p>
+                <div className="flex items-center justify-between px-3 text-[0.7rem] font-bold text-slate-800">
+                  <span>9:41</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="size-2 rounded-full bg-emerald-500" />
+                    <span>5G</span>
+                  </div>
+                </div>
+
+                <div className="mt-3 rounded-2xl bg-slate-50/80 p-3 text-left">
+                  <p className="text-[0.7rem] font-bold text-slate-400">Welcome back</p>
+                  <h3 className="text-sm font-extrabold text-slate-900">Opportunity Pipeline</h3>
+
+                  <div className="mt-3 rounded-2xl bg-[#7c3aed] p-4 text-white shadow-md">
+                    <span className="text-[0.7rem] font-bold uppercase tracking-wider text-violet-200">
+                      Curated remote roles
+                    </span>
+                    <div className="mt-1 flex items-baseline justify-between">
+                      <span className="text-2xl font-extrabold tracking-tight">2,020</span>
+                      <span className="rounded-full bg-white/20 px-2 py-0.5 text-[0.65rem] font-bold text-emerald-300">
+                        +293 today
+                      </span>
+                    </div>
+
+                    <div className="mt-3 h-8 w-full opacity-85">
+                      <svg viewBox="0 0 200 40" fill="none" className="size-full">
+                        <path
+                          d="M0 25 Q 30 10, 60 20 T 120 15 T 170 30 T 200 8"
+                          stroke="white"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 grid grid-cols-4 gap-1.5 text-center">
+                    {[
+                      { icon: Search, label: 'Search' },
+                      { icon: BookmarkCheck, label: 'Saved' },
+                      { icon: FolderKanban, label: 'Pipeline' },
+                      { icon: Compass, label: 'Feeds' },
+                    ].map(({ icon: Icon, label }) => (
+                      <div key={label} className="rounded-xl bg-white p-2 text-slate-600 shadow-2xs">
+                        <Icon className="mx-auto size-3.5 text-[#7c3aed]" />
+                        <span className="mt-1 block text-[0.6rem] font-bold">{label}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div
+                    onClick={() => setSelectedJob(allCuratedJobs[0])}
+                    className="mt-3 cursor-pointer rounded-xl border border-slate-200/80 bg-white p-2.5 transition-all hover:border-[#7c3aed]"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="rounded-full bg-violet-50 px-2 py-0.5 text-[0.6rem] font-bold text-[#7c3aed]">Webflow</span>
+                      <span className="text-[0.65rem] font-bold text-emerald-600">$500/mo</span>
+                    </div>
+                    <p className="mt-1 truncate text-xs font-bold text-slate-900">Ui/Ux Designer Web</p>
+                    <p className="text-[0.65rem] text-slate-500">Tap to open full role preview →</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════
-          SOCIAL PROOF / TRUST STRIP
+          TRUST & CAPABILITY RIBBON
       ══════════════════════════════════════ */}
-      <div className="border-y border-[#e8e6df] bg-white">
-        <div className="mx-auto max-w-7xl px-5 py-6 sm:px-8 lg:px-12">
-          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-center">
+      <div className="border-y border-slate-200/80 bg-white py-6">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <p className="mb-4 text-center text-xs font-bold uppercase tracking-widest text-slate-400">
+            Built for people who know the African remote job search hustle
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-center sm:gap-x-12">
             {[
-              { icon: Search, text: 'Search curated remote feeds' },
-              { icon: BookmarkCheck, text: 'Save promising opportunities' },
-              { icon: Send, text: 'Track every application step' },
-              { icon: Zap, text: 'Free to get started' },
-            ].map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-2 text-xs font-semibold text-[#56615c]">
-                <Icon aria-hidden="true" className="size-3.5 text-[#6549ad]" />
-                {text}
+              { icon: ShieldCheck, label: 'Direct Feed Verification' },
+              { icon: Compass, label: 'Curated for Africa & Global' },
+              { icon: FolderKanban, label: 'Personal Opportunity Pipeline' },
+              { icon: CheckCircle2, label: '100% Free & Transparent' },
+            ].map(({ icon: Icon, label }) => (
+              <div key={label} className="flex items-center gap-2 text-xs font-bold text-slate-700">
+                <div className="grid size-6 place-items-center rounded-full bg-[#f3e8ff] text-[#7c3aed]">
+                  <Icon className="size-3.5" />
+                </div>
+                {label}
               </div>
             ))}
           </div>
@@ -600,11 +620,80 @@ export default function HomePage() {
       </div>
 
       {/* ══════════════════════════════════════
-          LATEST JOBS SHOWCASE (Reference Design Match & Fully Interactive)
+          FEATURE HIGHLIGHTS: "Cut out the noise. Protect your energy."
       ══════════════════════════════════════ */}
-      <section id="latest-jobs" className="bg-[#fbfaf7] py-16 sm:py-24">
+      <section id="features" className="py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 text-center">
+          <span className="inline-flex items-center rounded-full bg-[#f3e8ff] px-3.5 py-1 text-xs font-bold text-[#7c3aed]">
+            Built for African talent
+          </span>
+
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+            Cut out the noise. <span className="text-[#7c3aed]">Protect your energy.</span>
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-base text-slate-600">
+            Job hunting while managing power cuts, unstable internet, and silent rejections takes a toll. GigsHQ is built to give you back clarity and control.
+          </p>
+
+          <div className="mt-14 grid gap-6 text-left sm:grid-cols-2">
+            {/* Card 1: Real Location Signals */}
+            <div className="flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-7 shadow-xs sm:p-9 transition-all hover:shadow-md">
+              <div>
+                <div className="grid size-12 place-items-center rounded-2xl bg-[#7c3aed] text-white shadow-xs">
+                  <Compass className="size-6" />
+                </div>
+                <h3 className="mt-5 text-xl font-extrabold text-slate-900">
+                  Filters that respect your location
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  We highlight roles with clear signals for Nigeria, Africa-wide, or unrestricted global remote work. No more filling 40-minute application forms just to be told your country isn&apos;t supported.
+                </p>
+              </div>
+
+              <div className="mt-8 flex items-center justify-between rounded-2xl border border-slate-100 bg-slate-50/80 p-4">
+                <div>
+                  <p className="text-[0.7rem] font-bold uppercase tracking-wider text-slate-400">Available roles</p>
+                  <p className="text-xl font-extrabold text-slate-900">2,020+ listings</p>
+                </div>
+                <div className="flex items-center gap-1 text-xs font-bold text-emerald-600">
+                  <TrendingUp className="size-4" /> Updated daily
+                </div>
+              </div>
+            </div>
+
+            {/* Card 2: Consolidated Feeds */}
+            <div className="flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-7 shadow-xs sm:p-9 transition-all hover:shadow-md">
+              <div>
+                <div className="grid size-12 place-items-center rounded-2xl bg-[#7c3aed] text-white shadow-xs">
+                  <FolderKanban className="size-6" />
+                </div>
+                <h3 className="mt-5 text-xl font-extrabold text-slate-900">
+                  All your feeds consolidated
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  Instead of hopping between Jobicy, Remote OK, and Freehire every single morning, search once. Save the original link and apply directly on the employer&apos;s site.
+                </p>
+              </div>
+
+              <div className="mt-8 flex items-center justify-around rounded-2xl border border-slate-100 bg-slate-50/80 p-4">
+                <span className="rounded-xl bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-2xs">Jobicy</span>
+                <span className="text-slate-300 font-bold">→</span>
+                <div className="grid size-10 place-items-center rounded-xl bg-[#7c3aed] text-white font-extrabold text-xs shadow-xs">
+                  HQ
+                </div>
+                <span className="text-slate-300 font-bold">←</span>
+                <span className="rounded-xl bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-2xs">RemoteOK</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════
+          LATEST JOBS SHOWCASE (Clickable 2x2 Grid + Category Filters)
+      ══════════════════════════════════════ */}
+      <section id="latest-jobs" className="border-t border-slate-200/80 bg-white py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-          {/* Header row */}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="flex items-center gap-2">
@@ -612,11 +701,11 @@ export default function HomePage() {
                   Latest jobs
                 </h2>
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700 ring-1 ring-emerald-200">
-                  <span className="size-2 rounded-full bg-emerald-500 animate-pulse" /> Live feed
+                  <span className="size-2 rounded-full bg-emerald-500" /> Live feed
                 </span>
               </div>
               <p className="mt-1.5 text-sm font-medium text-slate-500 sm:text-base">
-                2020 jobs live – 293 added today. Click any card to preview.
+                2,020 remote roles curated — updated daily from verified feeds. Click any role to preview requirements before applying.
               </p>
             </div>
             <Link
@@ -627,7 +716,6 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {/* Interactive Category Filter Pills */}
           <div className="mt-6 flex flex-wrap items-center gap-2">
             {[
               { id: 'all', label: 'All roles' },
@@ -642,9 +730,9 @@ export default function HomePage() {
                   key={id}
                   type="button"
                   onClick={() => handleCategoryChange(id)}
-                  className={`rounded-full px-4 py-1.5 text-xs font-bold transition-all duration-200 focus-visible:outline-2 focus-visible:outline-[#573da5] ${
+                  className={`rounded-full px-4 py-1.5 text-xs font-bold transition-all duration-200 focus-visible:outline-2 focus-visible:outline-[#7c3aed] ${
                     active
-                      ? 'bg-[#573da5] text-white shadow-xs'
+                      ? 'bg-[#7c3aed] text-white shadow-xs'
                       : 'border border-slate-200/80 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50'
                   }`}
                 >
@@ -654,7 +742,6 @@ export default function HomePage() {
             })}
           </div>
 
-          {/* 2x2 Grid of Clickable, Colorful & Engaging Cards */}
           <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:gap-6">
             {displayedJobs.map((job) => (
               <JobCard
@@ -667,7 +754,6 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Pagination dots (matching reference) */}
           {totalPages > 1 && (
             <div className="mt-9 flex items-center justify-center gap-2.5">
               {Array.from({ length: totalPages }).map((_, index) => (
@@ -689,164 +775,152 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════════════════════════════
-          HOW IT WORKS
+          HOW IT WORKS (OPTION A: INTERACTIVE MICRO-UI PIPELINE CARDS)
       ══════════════════════════════════════ */}
-      <section id="how-it-works" className="border-t border-[#e8e6df] bg-white px-5 py-20 sm:px-8 sm:py-28 lg:px-12">
+      <section id="how-it-works" className="border-t border-slate-200/80 bg-slate-50/50 px-5 py-20 sm:px-8 sm:py-28 lg:px-12">
         <div className="mx-auto max-w-7xl">
-          {/* Section header */}
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs font-extrabold uppercase tracking-[.2em] text-[#6549ad]">From search to application</p>
-            <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-[-0.045em] text-[#1c2922] sm:text-4xl lg:text-5xl">
-              See your job search take shape.
+            <span className="inline-flex items-center rounded-full bg-[#f3e8ff] px-3.5 py-1 text-xs font-bold text-[#7c3aed]">
+              How it works
+            </span>
+            <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-[-0.045em] text-slate-900 sm:text-4xl lg:text-5xl">
+              From search to application
             </h2>
-            <p className="mt-4 text-base leading-7 text-[#637067]">
-              Find roles from selected feeds, save the ones worth checking, then track your next step with each lead.
+            <p className="mt-4 text-base leading-7 text-slate-600">
+              A grounded three-step process built to save your hours and prevent mental fatigue.
             </p>
           </div>
 
-          {/* Steps grid */}
+          {/* 3 Step Cards with Micro-UI Artifacts (Option A) */}
           <div className="mt-14 grid gap-6 sm:grid-cols-3">
-            {[
-              {
-                step: '01',
-                icon: Search,
-                title: 'Search relevant roles',
-                body: 'Filter curated remote feeds by role signals, skills, and location text — Nigeria, Africa, worldwide, and more.',
-                color: 'bg-[#f0edf8] text-[#6549ad]',
-                border: 'border-[#ded7f0]',
-              },
-              {
-                step: '02',
-                icon: BookmarkCheck,
-                title: 'Save a lead',
-                body: 'Keep the role and its source link in your personal opportunity list so nothing slips through the cracks.',
-                color: 'bg-[#eaf2e9] text-[#477454]',
-                border: 'border-[#d4e8d0]',
-              },
-              {
-                step: '03',
-                icon: Send,
-                title: 'Track your next step',
-                body: 'Update the lead when you apply, add notes, or keep it for later. Your search stays organized without extra effort.',
-                color: 'bg-[#fef3e6] text-[#9a6f30]',
-                border: 'border-[#f0ddb0]',
-              },
-            ].map(({ step, icon: Icon, title, body, color, border }) => (
-              <div
-                key={step}
-                className={`group relative overflow-hidden rounded-2xl border ${border} bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_-20px_rgba(37,46,39,.18)] sm:p-8`}
-              >
-                <span
-                  aria-hidden="true"
-                  className="absolute right-4 top-4 text-6xl font-extrabold leading-none text-[#f0ede8] select-none"
-                >
-                  {step}
-                </span>
-
-                <div className={`relative z-10 grid size-10 place-items-center rounded-xl ${color}`}>
-                  <Icon aria-hidden="true" className="size-5" />
-                </div>
-
-                <h3 className="relative z-10 mt-4 text-base font-extrabold tracking-tight text-[#253129]">{title}</h3>
-                <p className="relative z-10 mt-2 text-sm leading-6 text-[#68736c]">{body}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Detailed feature panel */}
-          <div className="mt-8 overflow-hidden rounded-2xl border border-[#e6e3dc] bg-white shadow-[0_24px_60px_-44px_rgba(37,46,39,.35)] lg:grid lg:grid-cols-[1.25fr_.75fr]">
-            {/* Mock UI side with Clickable JobCard */}
-            <div className="border-b border-[#e6e3dc] p-4 sm:p-6 lg:border-b-0 lg:border-r">
-              <div className="overflow-hidden rounded-xl border border-[#e8e5de] bg-[#f9f8f5]">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#eeece7] bg-white px-4 py-3">
-                  <div>
-                    <p className="text-[0.7rem] font-extrabold uppercase tracking-[.15em] text-[#56615c]">Job discovery</p>
-                    <p className="mt-0.5 text-sm font-bold text-[#202c26]">Find a role to explore</p>
+            {/* Step 1: Discover with Real Filters */}
+            <div className="flex flex-col justify-between rounded-2xl border border-violet-100 bg-white p-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:p-7">
+              <div>
+                <div className="flex items-center justify-between">
+                  <div className="grid size-10 place-items-center rounded-xl bg-[#f3e8ff] text-[#7c3aed]">
+                    <Search aria-hidden="true" className="size-5" />
                   </div>
-                  <span className="rounded-md border border-[#e6e1f0] bg-[#f6f3fb] px-2.5 py-1 text-xs font-bold text-[#573da5]">
-                    Interactive Preview
+                  <span className="rounded-full bg-violet-50 px-2.5 py-0.5 text-xs font-extrabold text-[#7c3aed]">
+                    Step 01
                   </span>
                 </div>
-                <div className="grid gap-2.5 p-3 sm:grid-cols-[1fr_auto] sm:p-4">
-                  <div className="flex min-h-10 items-center gap-2 rounded-lg border border-[#e7e8e2] bg-white px-3">
-                    <Search aria-hidden="true" className="size-3.5 shrink-0 text-[#879088]" />
-                    <span className="text-xs text-[#69746d]">Role, skill, or company</span>
-                  </div>
-                  <div className="flex min-h-10 items-center gap-2 rounded-lg border border-[#e7e8e2] bg-white px-3 text-xs font-medium text-[#56615c]">
-                    <MapPin aria-hidden="true" className="size-3.5 text-[#6549ad]" />
-                    Nigeria, Africa, worldwide
-                  </div>
+
+                <h3 className="mt-5 text-base font-extrabold tracking-tight text-slate-900">
+                  Filter where you&apos;re actually eligible
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                  Tired of finding &ldquo;remote&rdquo; roles only to hit a country restriction on the final dropdown? We filter for listings that explicitly accept Nigeria, Africa, or genuine worldwide applicants.
+                </p>
+              </div>
+
+              {/* Micro-UI 1: Active Filter Simulation */}
+              <div className="mt-6 rounded-xl border border-slate-100 bg-slate-50/80 p-3 space-y-2">
+                <div className="flex flex-wrap items-center gap-1.5 text-[0.68rem] font-bold">
+                  <span className="rounded-md bg-violet-100/80 px-2 py-0.5 text-[#7c3aed]">Role: Web & Frontend</span>
+                  <span className="rounded-md bg-emerald-100/80 px-2 py-0.5 text-emerald-800">Region: Nigeria / Africa / Global</span>
                 </div>
-                <div className="mx-3 mb-3 sm:mx-4 sm:mb-4">
-                  <JobCard
-                    job={allCuratedJobs[4]}
-                    initiallySaved={savedJobIds.has(allCuratedJobs[4].id)}
-                    onSaveToggle={handleSaveToggle}
-                    onClick={(job) => setSelectedJob(job)}
-                  />
+                <div className="flex items-center justify-between text-[0.7rem] font-semibold text-slate-700 pt-1.5 border-t border-slate-200/60">
+                  <span>Verified eligible roles</span>
+                  <span className="text-emerald-600 font-bold">2,020 live</span>
                 </div>
               </div>
-              <p className="mt-3 text-center text-xs leading-4 text-[#8a938d]">
-                Click anywhere on the card to preview full requirements
-              </p>
             </div>
 
-            {/* Feature list side */}
-            <div className="flex flex-col justify-center gap-0 p-6 sm:p-8">
-              {[
-                {
-                  icon: Search,
-                  color: 'bg-[#f0edf8] text-[#6549ad]',
-                  title: 'Search relevant roles',
-                  body: 'Filter selected feeds by role signals, skills, and location text.',
-                  border: true,
-                },
-                {
-                  icon: BookmarkCheck,
-                  color: 'bg-[#f0edf8] text-[#6549ad]',
-                  title: 'Save a lead',
-                  body: 'Keep the role and its source link in your personal opportunity list.',
-                  border: true,
-                },
-                {
-                  icon: Send,
-                  color: 'bg-[#eaf2e9] text-[#477454]',
-                  title: 'Track your next step',
-                  body: 'Update the lead when you apply, or keep it for later.',
-                  border: false,
-                },
-              ].map(({ icon: Icon, color, title, body, border }) => (
-                <div key={title} className={`flex gap-4 ${border ? 'border-b border-[#e8e6df] pb-6 mb-6' : ''}`}>
-                  <span className={`grid size-9 shrink-0 place-items-center rounded-xl ${color}`}>
-                    <Icon aria-hidden="true" className="size-4" />
-                  </span>
-                  <div>
-                    <h3 className="text-sm font-extrabold text-[#253129]">{title}</h3>
-                    <p className="mt-1 text-sm leading-6 text-[#68736c]">{body}</p>
+            {/* Step 2: One-Click Save */}
+            <div className="flex flex-col justify-between rounded-2xl border border-emerald-100 bg-white p-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:p-7">
+              <div>
+                <div className="flex items-center justify-between">
+                  <div className="grid size-10 place-items-center rounded-xl bg-emerald-50 text-emerald-700">
+                    <BookmarkCheck aria-hidden="true" className="size-5" />
                   </div>
+                  <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-extrabold text-emerald-700">
+                    Step 02
+                  </span>
                 </div>
-              ))}
+
+                <h3 className="mt-5 text-base font-extrabold tracking-tight text-slate-900">
+                  Save the lead before you lose it
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                  Internet cuts out, power flickers, or you spot a role while commuting. Tap the heart to stash the listing and direct source link into your personal pipeline—no more 40 lost browser tabs.
+                </p>
+              </div>
+
+              {/* Micro-UI 2: Saved Lead Row */}
+              <div className="mt-6 rounded-xl border border-slate-100 bg-slate-50/80 p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="grid size-5.5 place-items-center rounded-md bg-[#4353ff] text-[0.62rem] font-extrabold text-white shrink-0">W</span>
+                    <span className="truncate text-xs font-bold text-slate-800">Webflow · UI Designer</span>
+                  </div>
+                  <span className="text-rose-500 font-bold text-xs flex items-center gap-1 shrink-0">
+                    <Heart className="size-3.5 fill-rose-500" /> Saved
+                  </span>
+                </div>
+                <p className="text-[0.68rem] text-slate-500 pt-1.5 border-t border-slate-200/60">
+                  Stored in your workspace with original apply link
+                </p>
+              </div>
+            </div>
+
+            {/* Step 3: Organized Follow-Through */}
+            <div className="flex flex-col justify-between rounded-2xl border border-amber-100 bg-white p-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:p-7">
+              <div>
+                <div className="flex items-center justify-between">
+                  <div className="grid size-10 place-items-center rounded-xl bg-amber-50 text-amber-700">
+                    <Send aria-hidden="true" className="size-5" />
+                  </div>
+                  <span className="rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-extrabold text-amber-700">
+                    Step 03
+                  </span>
+                </div>
+
+                <h3 className="mt-5 text-base font-extrabold tracking-tight text-slate-900">
+                  Stay sane through every follow-up
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                  Sending applications into silence is draining. GigsHQ gives you a quiet, organized system to track where you applied, log dates, and follow up with confidence until you land the role.
+                </p>
+              </div>
+
+              {/* Micro-UI 3: Pipeline Tracker Progression */}
+              <div className="mt-6 rounded-xl border border-slate-100 bg-slate-50/80 p-3">
+                <div className="flex items-center justify-between text-[0.68rem] font-bold text-slate-600 mb-2">
+                  <span>Linear status</span>
+                  <span className="text-[#7c3aed]">Interview stage</span>
+                </div>
+                <div className="flex items-center gap-1 text-[0.65rem] font-bold">
+                  <span className="flex-1 rounded-md bg-emerald-100 text-emerald-800 px-1.5 py-1 text-center">Saved</span>
+                  <span className="text-slate-300 font-bold">→</span>
+                  <span className="flex-1 rounded-md bg-emerald-100 text-emerald-800 px-1.5 py-1 text-center">Applied</span>
+                  <span className="text-slate-300 font-bold">→</span>
+                  <span className="flex-1 rounded-md bg-violet-100 text-[#7c3aed] px-1.5 py-1 text-center font-extrabold">Interview</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════
-          TRANSPARENCY / FAQ
+          TRANSPARENCY & CLEAR EXPECTATIONS
       ══════════════════════════════════════ */}
-      <section id="transparency" className="border-t border-[#e8e6df] bg-white">
+      <section id="transparency" className="border-t border-slate-200/80 bg-white">
         <div className="mx-auto grid max-w-7xl gap-12 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[.85fr_1.15fr] lg:gap-20 lg:px-12 lg:items-start">
           <div className="lg:sticky lg:top-28">
-            <p className="text-xs font-extrabold uppercase tracking-[.18em] text-[#6549ad]">Clear expectations</p>
-            <h2 className="mt-3 max-w-md text-3xl font-extrabold leading-tight tracking-[-0.045em] text-[#1c2922] sm:text-4xl">
+            <span className="inline-flex items-center rounded-full bg-[#f3e8ff] px-3.5 py-1 text-xs font-bold text-[#7c3aed]">
+              Clear expectations
+            </span>
+            {/* Same purple color as requested */}
+            <h2 className="mt-3 max-w-md text-3xl font-extrabold leading-tight tracking-[-0.045em] text-[#7c3aed] sm:text-4xl">
               Useful tools, without pretending every listing is perfect.
             </h2>
-            <p className="mt-4 text-sm leading-7 text-[#637067]">
-              We believe a good tool earns trust by being honest about what it can and can&rsquo;t do.
+            <p className="mt-4 text-sm leading-relaxed text-slate-600">
+              We won&apos;t sell you a false dream. Here is the honest truth about how GigsHQ works and what to expect.
             </p>
           </div>
 
-          <div className="divide-y divide-[#e8e6df]">
+          <div className="divide-y divide-slate-200/80">
             {[
               {
                 question: 'Does a Nigeria filter mean the employer accepts applications from Nigeria?',
@@ -876,40 +950,33 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════════════════════════════
-          FINAL CTA
+          FINAL CALL TO ACTION
       ══════════════════════════════════════ */}
       <section className="px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
-        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-[#1e1830] text-white sm:rounded-[2.5rem]">
-          {/* Layered background decorations */}
-          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-[#2d2050] via-[#1e1830] to-[#171328]" />
-          <div aria-hidden="true" className="absolute -right-24 -top-40 size-80 rounded-full border border-white/[0.07] sm:-right-10 sm:-top-52 sm:size-[32rem]" />
-          <div aria-hidden="true" className="absolute -right-8 -top-20 size-48 rounded-full border border-white/[0.04] sm:size-72" />
-          <div aria-hidden="true" className="absolute right-28 top-16 size-40 rounded-full bg-[#826bc0]/15 blur-3xl sm:size-64" />
-          <div aria-hidden="true" className="absolute left-1/4 bottom-0 size-48 rounded-full bg-[#5a8c5e]/10 blur-3xl" />
-
-          <div className="relative px-8 py-14 sm:px-14 sm:py-18 lg:px-20 lg:py-20">
-            <div className="max-w-2xl">
-              <p className="text-xs font-bold uppercase tracking-[.2em] text-[#c8b9f0]">Your search deserves a system</p>
-              <h2 className="mt-4 text-3xl font-extrabold leading-tight tracking-[-0.045em] sm:text-4xl lg:text-5xl">
-                Make your next application<br className="hidden sm:block" /> a little more intentional.
-              </h2>
-              <p className="mt-5 max-w-lg text-sm leading-7 text-white/65 sm:text-base sm:leading-8">
-                Create a personal workspace for discovering roles, saving the best leads, and keeping track of every step in your search.
-              </p>
-              <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
-                <Link
-                  href="/login?mode=sign-up"
-                  className="inline-flex min-h-[3rem] items-center justify-center gap-2 rounded-xl bg-white px-7 text-sm font-bold text-[#2d1f5e] shadow-[0_8px_24px_-8px_rgba(0,0,0,.5)] transition-all hover:-translate-y-0.5 hover:bg-[#f1edf8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                >
-                  Start your search <ArrowRight aria-hidden="true" className="size-4" />
-                </Link>
-                <Link
-                  href="/login"
-                  className="inline-flex min-h-[3rem] items-center justify-center gap-2 rounded-xl px-7 text-sm font-bold text-white/80 ring-1 ring-white/20 transition-all hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                >
-                  Sign in
-                </Link>
-              </div>
+        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-slate-950 px-8 py-14 text-center text-white sm:rounded-[2.5rem] sm:px-14 sm:py-20">
+          <div className="relative z-10 mx-auto max-w-2xl">
+            <span className="inline-flex items-center rounded-full bg-violet-900/60 px-4 py-1 text-xs font-bold text-violet-300">
+              Keep moving forward
+            </span>
+            <h2 className="mt-4 text-3xl font-extrabold leading-tight tracking-[-0.04em] sm:text-4xl lg:text-5xl">
+              Your next remote opportunity is out there. <span className="text-violet-400">Stay consistent.</span>
+            </h2>
+            <p className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-slate-300 sm:text-base">
+              Stop losing tabs and guessing eligibility. Build a daily search habit with a personal workspace that has your back.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
+              <Link
+                href="/login?mode=sign-up"
+                className="inline-flex min-h-[3rem] items-center justify-center gap-2 rounded-full bg-[#7c3aed] px-8 text-sm font-bold text-white shadow-lg transition-all hover:bg-[#6d28d9]"
+              >
+                Start your search free <ArrowRight aria-hidden="true" className="size-4" />
+              </Link>
+              <Link
+                href="/login"
+                className="inline-flex min-h-[3rem] items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 text-sm font-bold text-white transition-all hover:bg-white/20"
+              >
+                Sign in
+              </Link>
             </div>
           </div>
         </div>
@@ -918,45 +985,46 @@ export default function HomePage() {
       {/* ══════════════════════════════════════
           FOOTER
       ══════════════════════════════════════ */}
-      <footer className="border-t border-[#e8e6df] bg-white">
+      <footer className="border-t border-slate-200/80 bg-white">
         <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:px-12">
           <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
-            {/* Brand */}
+            {/* Brand - Closed gap */}
             <div className="flex flex-col gap-3">
-              <Link href="/" className="flex items-center gap-2 group">
+              <Link href="/" className="flex items-center gap-1.5 group">
                 <Image
                   src="/gigshqicon.png"
                   alt=""
-                  width={28}
-                  height={28}
+                  width={26}
+                  height={26}
                   className="rounded-lg transition-transform group-hover:scale-105"
                 />
-                <span className="text-base font-extrabold tracking-tight text-[#18231f]">
-                  gigs<span className="text-[#573da5]">hq</span>
+                <span className="text-base font-extrabold tracking-tight text-slate-900">
+                  gigs<span className="text-[#7c3aed]">hq</span>
                 </span>
               </Link>
-              <p className="max-w-xs text-xs leading-5 text-[#8a938d]">
-                Built to help remote job seekers in Africa search, organize, and follow through. Listings always link to their original sources.
+              <p className="max-w-xs text-xs leading-relaxed text-slate-500">
+                Built to help remote digital workers in Africa search, organize, and follow through. All listings link to original sources.
               </p>
             </div>
 
             {/* Nav links */}
-            <nav aria-label="Footer navigation" className="flex flex-wrap gap-x-10 gap-y-3 text-sm">
+            <nav aria-label="Footer navigation" className="flex flex-wrap gap-x-12 gap-y-4 text-sm">
               <div className="flex flex-col gap-3">
-                <p className="text-xs font-extrabold uppercase tracking-[.15em] text-[#8a938d]">Product</p>
-                <a href="#latest-jobs" className="font-semibold text-[#56615c] transition-colors hover:text-[#573da5]">Latest jobs</a>
-                <a href="#how-it-works" className="font-semibold text-[#56615c] transition-colors hover:text-[#573da5]">How it works</a>
-                <a href="#transparency" className="font-semibold text-[#56615c] transition-colors hover:text-[#573da5]">Transparency</a>
+                <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Product</p>
+                <a href="#how-it-works" className="font-semibold text-slate-600 transition-colors hover:text-[#7c3aed]">How it works</a>
+                <a href="#features" className="font-semibold text-slate-600 transition-colors hover:text-[#7c3aed]">Features</a>
+                <a href="#latest-jobs" className="font-semibold text-slate-600 transition-colors hover:text-[#7c3aed]">Latest jobs</a>
+                <a href="#transparency" className="font-semibold text-slate-600 transition-colors hover:text-[#7c3aed]">Transparency</a>
               </div>
               <div className="flex flex-col gap-3">
-                <p className="text-xs font-extrabold uppercase tracking-[.15em] text-[#8a938d]">Account</p>
-                <Link href="/login" className="font-semibold text-[#56615c] transition-colors hover:text-[#573da5]">Sign in</Link>
-                <Link href="/login?mode=sign-up" className="font-semibold text-[#573da5] transition-colors hover:text-[#463087]">Get started →</Link>
+                <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Account</p>
+                <Link href="/login" className="font-semibold text-slate-600 transition-colors hover:text-[#7c3aed]">Sign in</Link>
+                <Link href="/login?mode=sign-up" className="font-semibold text-[#7c3aed] transition-colors hover:text-[#6d28d9]">Get started →</Link>
               </div>
             </nav>
           </div>
 
-          <div className="mt-10 flex flex-col gap-2 border-t border-[#e8e6df] pt-6 text-xs text-[#8a938d] sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-10 flex flex-col gap-2 border-t border-slate-100 pt-6 text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between">
             <p>© {new Date().getFullYear()} GigsHQ. All rights reserved.</p>
             <p>Remote job search, organized.</p>
           </div>
@@ -975,15 +1043,15 @@ export default function HomePage() {
       />
 
       {/* ══════════════════════════════════════
-          LIVE TOAST / NOTIFICATION BANNER
+          LIVE TOAST NOTIFICATION
       ══════════════════════════════════════ */}
       {toastMessage && (
         <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 flex items-center gap-3 rounded-full border border-violet-200 bg-white/95 px-5 py-3 text-xs font-bold text-slate-800 shadow-xl backdrop-blur-md animate-in fade-in slide-in-from-bottom-4">
-          <Sparkles className="size-4 text-[#573da5]" />
+          <CheckCircle2 className="size-4 text-emerald-600" />
           <span>{toastMessage}</span>
           <Link
             href="/login?mode=sign-up"
-            className="ml-2 rounded-full bg-[#573da5] px-3 py-1 text-white hover:bg-[#463087]"
+            className="ml-2 rounded-full bg-[#7c3aed] px-3 py-1 text-white hover:bg-[#6d28d9]"
           >
             Sign up to sync
           </Link>
