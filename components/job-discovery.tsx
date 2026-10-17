@@ -51,12 +51,16 @@ function matchesRegion(job: RemoteJob, region: Region) {
   const location = job.location.toLowerCase()
   const worldwide = /\b(worldwide|anywhere|global|all countries)\b/.test(location)
   if (worldwide) return true
+  const unspecifiedRemoteEligibility = /remote\s*[·-]\s*eligibility not specified/.test(location)
 
   if (region === 'nigeria') {
-    return /\bnigeria\b|\bafrica\b|\blagos\b|\babuja\b|\bport harcourt\b|\bibadan\b|\bkano\b|\benugu\b|\bkaduna\b|\bbenin city\b/.test(location)
+    return unspecifiedRemoteEligibility
+      || /\bnigeria\b|\bafrica\b|\blagos\b|\babuja\b|\bport harcourt\b|\bibadan\b|\bkano\b|\benugu\b|\bkaduna\b|\bbenin city\b/.test(location)
   }
 
-  return /\bafrica\b/.test(location) || africanCountries.some((country) => location.includes(country))
+  return unspecifiedRemoteEligibility
+    || /\bafrica\b/.test(location)
+    || africanCountries.some((country) => location.includes(country))
 }
 
 function formatDate(value: string) {
@@ -167,18 +171,24 @@ export function JobDiscovery({
   async function saveJob(job: RemoteJob) {
     setSavingUrl(job.url)
     setError('')
-    const saved = await onSave({
-      company_name: job.company,
-      title: job.title,
-      description: plainText(job.excerpt) || null,
-      source_name: job.sourceName,
-      source_url: job.url,
-      contact_name: null,
-      contact_email: null,
-      compensation: job.salary,
-    })
-    if (!saved) setError(`Could not save ${job.title}. Check the error shown above and try again.`)
-    setSavingUrl('')
+    try {
+      const saved = await onSave({
+        company_name: job.company,
+        title: job.title,
+        description: plainText(job.excerpt) || null,
+        source_name: job.sourceName,
+        source_url: job.url,
+        contact_name: null,
+        contact_email: null,
+        compensation: job.salary,
+      })
+      if (!saved) setError(`Could not save ${job.title}. Check the error shown above and try again.`)
+    } catch (caughtError) {
+      const message = caughtError instanceof Error ? caughtError.message : 'An unexpected error occurred.'
+      setError(`Could not save ${job.title}: ${message}`)
+    } finally {
+      setSavingUrl('')
+    }
   }
 
   return (
@@ -243,7 +253,7 @@ export function JobDiscovery({
           <h2 className="text-xl font-bold text-slate-950">{filteredJobs.length} {filteredJobs.length === 1 ? 'listing' : 'listings'}</h2>
           <p className="mt-1 text-sm text-slate-600">
             Showing listings with both a target-role signal and related skill evidence.
-            {' '}{region === 'nigeria' ? 'Location text must mention Nigeria, Africa-wide, or worldwide. Confirm actual eligibility on the listing.' : region === 'africa' ? 'Location text must mention an African country, Africa-wide, or worldwide. Confirm actual eligibility on the listing.' : region === 'remote' ? 'Remote listings may have country restrictions. Confirm on the source.' : 'Location eligibility varies by listing.'}
+            {' '}{region === 'nigeria' ? 'Location text may mention Nigeria, Africa-wide, or worldwide; remote listings with unspecified eligibility are also included. Confirm actual eligibility on the listing.' : region === 'africa' ? 'Location text may mention an African country, Africa-wide, or worldwide; remote listings with unspecified eligibility are also included. Confirm actual eligibility on the listing.' : region === 'remote' ? 'Remote listings may have country restrictions. Confirm on the source.' : 'Location eligibility varies by listing.'}
           </p>
         </div>
         {updatedAt && (

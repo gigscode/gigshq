@@ -290,7 +290,7 @@ export function getTargetJobCategories(
 ): TargetJobCategory[] {
   const normalizedTitle = normalize(title)
   const normalizedDetails = normalize([details, ...metadata].join(' '))
-  const normalizedIntro = normalize(details).slice(0, 2000)
+  const normalizedDescription = normalize(details)
   const combinedText = `${normalizedTitle} ${normalizedDetails}`
   const titleHasSpecificWebRole = hasAnyPhrase(normalizedTitle, [
     'full stack', 'fullstack', 'front end', 'frontend', 'react', 'next js',
@@ -308,7 +308,7 @@ export function getTargetJobCategories(
     .filter((lane) => {
       const titleHasRoleWord = hasAnyPhrase(normalizedTitle, lane.titleRoleWords)
       const roleMatches = hasAnyPhrase(normalizedTitle, lane.titleRolePhrases)
-        || (titleHasRoleWord && hasAnyPhrase(normalizedIntro, lane.detailRolePhrases))
+        || (titleHasRoleWord && hasAnyPhrase(normalizedDescription, lane.detailRolePhrases))
       const skillMatches = hasAnyPhrase(combinedText, lane.skillPhrases)
       return roleMatches && skillMatches
     })
