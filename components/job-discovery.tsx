@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowUpRight, BriefcaseBusiness, Check, Clock3, LoaderCircle, Plus, RefreshCw, Search } from 'lucide-react'
+import { ArrowUpRight, BriefcaseBusiness, Check, Clock3, DollarSign, LoaderCircle, MapPin, Plus, RefreshCw, Search } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -61,6 +61,27 @@ function matchesRegion(job: RemoteJob, region: Region) {
   return unspecifiedRemoteEligibility
     || /\bafrica\b/.test(location)
     || africanCountries.some((country) => location.includes(country))
+}
+
+const companyColorPalettes = [
+  'bg-[#4353ff]',
+  'bg-gradient-to-tr from-amber-500 to-orange-500',
+  'bg-slate-900',
+  'bg-[#4a154b]',
+  'bg-emerald-600',
+  'bg-indigo-600',
+  'bg-rose-500',
+  'bg-teal-600',
+  'bg-blue-600',
+]
+
+function getCompanyColor(name: string) {
+  let hash = 0
+  for (let i = 0; i < name.length; i++) {
+    hash = (hash << 5) - hash + name.charCodeAt(i)
+    hash |= 0
+  }
+  return companyColorPalettes[Math.abs(hash) % companyColorPalettes.length]
 }
 
 function formatDate(value: string) {
@@ -273,49 +294,81 @@ export function JobDiscovery({
             const saved = savedUrls.has(job.url)
             const postedDate = formatPostedDate(job.publishedAt)
             return (
-              <Card key={job.id} className="border-slate-200 bg-white shadow-sm">
+              <Card key={job.id} className="group border-slate-200/90 bg-white shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-violet-200 hover:shadow-md">
                 <CardContent className="flex h-full flex-col p-5">
                   <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-slate-600">{displayCopy(job.company)}</p>
-                      <h3 className="mt-1 text-lg font-bold leading-6 text-slate-950">{displayCopy(job.title)}</h3>
+                    <div className="flex items-start gap-3 min-w-0">
+                      <div className={`grid size-11 shrink-0 place-items-center rounded-full text-base font-extrabold text-white shadow-xs ${getCompanyColor(job.company)}`}>
+                        {job.company.charAt(0).toUpperCase()}
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="truncate text-base font-bold text-slate-950 group-hover:text-[#573da5] transition-colors">{displayCopy(job.title)}</h3>
+                        <p className="mt-0.5 truncate text-xs text-slate-500">
+                          by <span className="font-semibold text-slate-700">{displayCopy(job.company)}</span>
+                          {categories.length > 0 && (
+                            <>
+                              {' '}in{' '}
+                              <span className="font-semibold text-[#0d9488]">
+                                {targetJobCategories.find((item) => item.id === categories[0])?.label || 'General'}
+                              </span>
+                            </>
+                          )}
+                        </p>
+                      </div>
                     </div>
-                    {categories.map((matchedCategory) => (
-                      <Badge key={matchedCategory} variant="outline" className="shrink-0">
-                        {targetJobCategories.find((item) => item.id === matchedCategory)?.label}
-                      </Badge>
-                    ))}
                   </div>
 
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <Badge variant="secondary">{displayCopy(job.location)}</Badge>
-                    {job.types.slice(0, 2).map((type) => <Badge key={type} variant="outline">{displayCopy(type)}</Badge>)}
-                    {job.industries.slice(0, 2).map((industry) => <Badge key={industry} variant="outline">{displayCopy(industry)}</Badge>)}
-                    {job.sourceName === 'Freehire' && <Badge variant="outline">Freehire source</Badge>}
+                  <div className="mt-3.5 flex flex-wrap items-center gap-2">
+                    {/* Employment type pill (Lilac) */}
+                    {job.types.length > 0 && (
+                      <span className="inline-flex items-center rounded-full bg-[#f3e8ff] px-3 py-1 text-xs font-semibold text-[#7e22ce] ring-1 ring-[#e9d5ff]/80">
+                        {displayCopy(job.types[0])}
+                      </span>
+                    )}
+
+                    {/* Location pill (Mint/Teal) */}
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#ecfdf5] px-3 py-1 text-xs font-semibold text-[#0f766e] ring-1 ring-[#a7f3d0]/80">
+                      <MapPin aria-hidden="true" className="size-3 text-[#0d9488]" />
+                      {displayCopy(job.location)}
+                    </span>
+
+                    {/* Compensation pill (Emerald) */}
+                    {job.salary && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-[#f0fdf4] px-3 py-1 text-xs font-semibold text-[#15803d] ring-1 ring-[#bbf7d0]/80">
+                        <DollarSign aria-hidden="true" className="size-3 text-[#16a34a]" />
+                        {displayCopy(job.salary)}
+                      </span>
+                    )}
+
+                    {job.sourceName === 'Freehire' && (
+                      <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
+                        Freehire
+                      </span>
+                    )}
                   </div>
 
-                  <p className="mt-3 flex items-center gap-1.5 text-xs text-slate-500">
+                  {job.excerpt && <p className="mt-3.5 line-clamp-3 text-xs leading-5 text-slate-600">{plainText(job.excerpt)}</p>}
+
+                  <p className="mt-3 flex items-center gap-1.5 text-xs text-[#059669] font-medium">
                     <Clock3 aria-hidden="true" className="size-3.5 shrink-0" />
                     {postedDate
                       ? <><span>Posted </span><time dateTime={job.publishedAt ?? undefined}>{postedDate}</time></>
                       : 'Posting date unavailable'}
                   </p>
 
-                  {job.excerpt && <p className="mt-4 line-clamp-4 text-sm leading-6 text-slate-600">{plainText(job.excerpt)}</p>}
-                  {job.salary && <p className="mt-3 text-sm font-medium text-slate-800">Listed compensation: {displayCopy(job.salary)}</p>}
-
-                  <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-slate-100 pt-4">
-                    <a href={job.url} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-1 rounded-lg bg-violet-800 px-3 text-sm font-medium text-white hover:bg-violet-900">
-                      {job.sourceName === 'Freehire' ? 'View original posting' : `View & apply on ${job.sourceName}`} <ArrowUpRight aria-hidden="true" className="size-4" />
+                  <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3.5">
+                    <a href={job.url} target="_blank" rel="noreferrer" className="inline-flex min-h-9 items-center gap-1 rounded-lg bg-[#573da5] px-3 text-xs font-semibold text-white shadow-xs hover:bg-[#463087]">
+                      {job.sourceName === 'Freehire' ? 'View original' : `View on ${job.sourceName}`} <ArrowUpRight aria-hidden="true" className="size-3.5" />
                     </a>
                     <Button
                       type="button"
                       variant="outline"
+                      size="sm"
                       className="ml-auto"
                       disabled={saved || savingUrl !== ''}
                       onClick={() => void saveJob(job)}
                     >
-                      {savingUrl === job.url ? <LoaderCircle aria-hidden="true" data-icon="inline-start" className="animate-spin" /> : saved ? <Check aria-hidden="true" data-icon="inline-start" /> : <Plus aria-hidden="true" data-icon="inline-start" />}
+                      {savingUrl === job.url ? <LoaderCircle aria-hidden="true" data-icon="inline-start" className="animate-spin" /> : saved ? <Check aria-hidden="true" data-icon="inline-start" className="text-emerald-600" /> : <Plus aria-hidden="true" data-icon="inline-start" />}
                       {savingUrl === job.url ? 'Saving…' : saved ? 'Saved' : 'Save lead'}
                     </Button>
                   </div>
