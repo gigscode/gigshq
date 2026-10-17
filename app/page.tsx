@@ -61,10 +61,10 @@ export default function HomePage() {
           <div className="relative rounded-[1.75rem] border border-[#e6e3dc] bg-white p-3 shadow-[0_28px_70px_-35px_rgba(37,46,39,.38)] sm:rounded-[2rem] sm:p-5">
             <div className="flex items-center justify-between border-b border-[#eeece7] px-2 pb-4">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[.16em] text-[#8a928b]">Your search, in one place</p>
+                <p className="text-xs font-bold uppercase tracking-[.16em] text-[#69746d]">Your search, in one place</p>
                 <p className="mt-1 text-sm font-bold text-[#202c26]">Opportunity workspace</p>
               </div>
-              <span className="rounded-full bg-[#f0edf8] px-3 py-1.5 text-[11px] font-bold text-[#573da5]">Personal</span>
+              <span className="rounded-full bg-[#f0edf8] px-3 py-1.5 text-xs font-bold text-[#573da5]">Personal</span>
             </div>
 
             <div className="grid grid-cols-3 gap-2.5 py-4 sm:gap-3">
@@ -73,7 +73,7 @@ export default function HomePage() {
                 { icon: BookmarkCheck, label: 'Save leads', active: false },
                 { icon: BriefcaseBusiness, label: 'Track', active: false },
               ].map(({ icon: Icon, label, active }) => (
-                <div key={label} className={`flex items-center justify-center gap-1.5 rounded-xl border px-2 py-3 text-[11px] font-bold sm:gap-2 sm:text-xs ${active ? 'border-[#ded7f0] bg-[#f6f3fb] text-[#573da5]' : 'border-[#eeece7] bg-[#fdfdfc] text-[#66716a]'}`}>
+                <div key={label} className={`flex items-center justify-center gap-1.5 rounded-xl border px-2 py-3 text-xs font-bold sm:gap-2 ${active ? 'border-[#ded7f0] bg-[#f6f3fb] text-[#573da5]' : 'border-[#eeece7] bg-[#fdfdfc] text-[#66716a]'}`}>
                   <Icon aria-hidden="true" className="size-3.5" />{label}
                 </div>
               ))}
@@ -82,7 +82,7 @@ export default function HomePage() {
             <div className="rounded-2xl bg-[#f6f7f3] p-3.5 sm:p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-xs font-bold text-[#29352e]">A focused search</p>
-                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#6d786f]">
+                <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#56615c]">
                   <MapPin aria-hidden="true" className="size-3" /> Nigeria · Africa · Worldwide
                 </span>
               </div>
@@ -95,8 +95,8 @@ export default function HomePage() {
             <div className="mt-3 rounded-2xl border border-[#ebe9e3] p-4 sm:p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <span className="rounded-full bg-[#eaf2e9] px-2.5 py-1 text-[10px] font-bold text-[#477454]">Web development</span>
-                  <p className="mt-3 text-[10px] font-semibold uppercase tracking-[.12em] text-[#858e87]">Illustrative card</p>
+                  <span className="rounded-full bg-[#eaf2e9] px-2.5 py-1 text-xs font-bold text-[#477454]">Web development</span>
+                  <p className="mt-3 text-xs font-semibold uppercase tracking-[.12em] text-[#56615c]">Illustrative card</p>
                   <h2 className="mt-1 text-lg font-extrabold tracking-tight text-[#202c26] sm:text-xl">A role worth a closer look</h2>
                   <p className="mt-1 text-xs text-[#68736c]">Check location and requirements on the original listing.</p>
                 </div>
@@ -105,13 +105,13 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-[#eeece7] pt-3">
-                <span className="inline-flex items-center gap-1.5 text-[11px] text-[#7b847d]">
+                <span className="inline-flex items-center gap-1.5 text-xs text-[#56615c]">
                   <Check aria-hidden="true" className="size-3.5 text-[#5f986a]" /> Source date when provided
                 </span>
-                <span className="rounded-lg border border-[#e6e1f0] px-3 py-2 text-[11px] font-bold text-[#573da5]">Save lead</span>
+                <span className="rounded-lg border border-[#e6e1f0] px-3 py-2 text-xs font-bold text-[#573da5]">Save lead</span>
               </div>
             </div>
-            <p className="px-2 pb-1 pt-3 text-center text-[10px] leading-4 text-[#8a928b]">Illustrative interface. This is not a live job listing.</p>
+            <p className="px-2 pb-1 pt-3 text-center text-xs leading-4 text-[#56615c]">Illustrative interface. This is not a live job listing.</p>
           </div>
         </div>
       </section>
@@ -135,10 +135,10 @@ export default function HomePage() {
               <div className="overflow-hidden rounded-xl border border-[#e8e5de] bg-white">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#eeece7] px-4 py-3">
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[.14em] text-[#858e87]">Job discovery</p>
+                    <p className="text-xs font-bold uppercase tracking-[.14em] text-[#56615c]">Job discovery</p>
                     <p className="mt-0.5 text-sm font-bold text-[#202c26]">Find a role to explore</p>
                   </div>
-                  <span className="rounded-md border border-[#e6e1f0] bg-[#f6f3fb] px-2.5 py-1 text-[10px] font-bold text-[#573da5]">Preview</span>
+                  <span className="rounded-md border border-[#e6e1f0] bg-[#f6f3fb] px-2.5 py-1 text-xs font-bold text-[#573da5]">Preview</span>
                 </div>
                 <div className="grid gap-2.5 p-3 sm:grid-cols-[1fr_auto] sm:p-4">
                   <div className="flex min-h-10 items-center gap-2 rounded-lg border border-[#e7e8e2] px-3">
@@ -153,23 +153,23 @@ export default function HomePage() {
                 <div className="mx-3 mb-3 rounded-lg border border-[#ebe9e3] p-4 sm:mx-4 sm:mb-4">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
-                      <p className="text-[10px] font-semibold uppercase tracking-wide text-[#858e87]">Illustrative listing, not live</p>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-[#56615c]">Illustrative listing, not live</p>
                       <h3 className="mt-1 text-base font-extrabold tracking-tight text-[#202c26]">Frontend Developer</h3>
                       <p className="mt-1 text-xs text-[#68736c]">Example role · Remote location to verify</p>
                     </div>
-                    <span className="rounded-full bg-[#eaf2e9] px-2.5 py-1 text-[10px] font-bold text-[#477454]">Web development</span>
+                    <span className="rounded-full bg-[#eaf2e9] px-2.5 py-1 text-xs font-bold text-[#477454]">Web development</span>
                   </div>
                   <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[#eeece7] pt-3">
-                    <span className="inline-flex items-center gap-1.5 text-[11px] text-[#7b847d]">
+                    <span className="inline-flex items-center gap-1.5 text-xs text-[#56615c]">
                       <Check aria-hidden="true" className="size-3.5 text-[#5f986a]" />Check original listing
                     </span>
-                    <span className="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-[#e6e1f0] px-2.5 text-[11px] font-bold text-[#573da5]">
+                    <span className="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-[#e6e1f0] px-2.5 text-xs font-bold text-[#573da5]">
                       <BookmarkCheck aria-hidden="true" className="size-3.5" />Save lead
                     </span>
                   </div>
                 </div>
               </div>
-              <p className="mt-3 text-center text-[10px] leading-4 text-[#8a928b]">Illustrative interface. This is not a live feed or real job.</p>
+              <p className="mt-3 text-center text-xs leading-4 text-[#56615c]">Illustrative interface. This is not a live feed or real job.</p>
             </div>
 
             <div className="flex flex-col justify-center gap-0 p-5 sm:p-7">

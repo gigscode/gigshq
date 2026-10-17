@@ -293,8 +293,8 @@ export function Dashboard({
   const appliedCount = opportunities.filter((item) => item.status === 'applied').length
 
   return (
-    <div className="flex min-h-screen bg-[#f6f7fb] text-slate-900">
-      <aside className="hidden w-62 shrink-0 flex-col bg-[#32177d] px-4 py-6 text-white lg:flex">
+    <div className="flex min-h-screen bg-[#fbfaf7] text-slate-900">
+      <aside className="hidden w-62 shrink-0 flex-col bg-[#573da5] px-4 py-6 text-white lg:flex">
         <div className="flex items-center gap-3 px-2">
           <Image src="/gigshqicon.png" alt="" width={40} height={40} className="rounded-xl bg-white p-1" />
           <span className="text-2xl font-bold tracking-tight">gigs<span className="text-violet-200">hq</span></span>
@@ -302,7 +302,7 @@ export function Dashboard({
         <p className="mb-3 mt-10 px-3 text-[11px] font-semibold uppercase tracking-[.12em] text-violet-200/70">Your workspace</p>
         <nav aria-label="Main navigation" className="flex flex-col gap-1">
           {navItems.map(({ label, key, icon: Icon }) => (
-            <button key={key} type="button" aria-current={active === key ? 'page' : undefined} onClick={() => setActive(key)} className={`flex min-h-11 items-center gap-3 rounded-lg px-3 text-left text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${active === key ? 'bg-white font-semibold text-[#32177d] shadow-sm' : 'text-violet-50 hover:bg-white/10 hover:text-white'}`}>
+            <button key={key} type="button" aria-current={active === key ? 'page' : undefined} onClick={() => setActive(key)} className={`flex min-h-11 items-center gap-3 rounded-lg px-3 text-left text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${active === key ? 'bg-white font-semibold text-[#573da5] shadow-sm' : 'text-violet-50 hover:bg-white/10 hover:text-white'}`}>
               <Icon aria-hidden="true" className="size-[18px]" />{label}
             </button>
           ))}
@@ -327,10 +327,10 @@ export function Dashboard({
             </Button>
           </div>
         </header>
-        <nav id="mobile-navigation" aria-label="Main navigation" className={`${menuOpen ? 'block' : 'hidden'} border-b border-violet-950/20 bg-[#32177d] px-4 py-3 lg:hidden`}>
+        <nav id="mobile-navigation" aria-label="Main navigation" className={`${menuOpen ? 'block' : 'hidden'} border-b border-violet-950/20 bg-[#573da5] px-4 py-3 lg:hidden`}>
           <div className="flex flex-col gap-1">
             {navItems.map(({ label, key, icon: Icon }) => (
-              <button key={key} type="button" aria-current={active === key ? 'page' : undefined} onClick={() => { setActive(key); setMenuOpen(false) }} className={`flex min-h-11 items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${active === key ? 'bg-white text-[#32177d] shadow-sm' : 'text-violet-50 hover:bg-white/10 hover:text-white'}`}>
+              <button key={key} type="button" aria-current={active === key ? 'page' : undefined} onClick={() => { setActive(key); setMenuOpen(false) }} className={`flex min-h-11 items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${active === key ? 'bg-white text-[#573da5] shadow-sm' : 'text-violet-50 hover:bg-white/10 hover:text-white'}`}>
                 <Icon aria-hidden="true" className="size-[18px]" />{label}
               </button>
             ))}

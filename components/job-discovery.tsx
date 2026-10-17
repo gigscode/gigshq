@@ -214,24 +214,24 @@ export function JobDiscovery({
       )}
 
       <section aria-label="Filter job listings" className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
-        <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto_auto]">
-          <label className="flex min-h-11 items-center gap-2 rounded-lg border border-slate-200 px-3 focus-within:border-violet-400 focus-within:ring-2 focus-within:ring-violet-100">
+        <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,auto)_minmax(0,auto)]">
+          <label className="flex min-h-11 min-w-0 items-center gap-2 rounded-lg border border-slate-200 px-3 focus-within:border-violet-400 focus-within:ring-2 focus-within:ring-violet-100">
             <Search aria-hidden="true" className="size-4 shrink-0 text-slate-400" />
             <span className="sr-only">Search jobs</span>
-            <Input value={query} onChange={(event) => setQuery(event.target.value)} className="h-10 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0" placeholder="Search title, company, location, or description" />
+            <Input value={query} onChange={(event) => setQuery(event.target.value)} className="h-10 min-w-0 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0" placeholder="Search title, company, location, or description" />
           </label>
-          <label className="flex min-h-11 items-center rounded-lg border border-slate-200 px-3 text-sm text-slate-600">
+          <label className="flex min-h-11 min-w-0 items-center rounded-lg border border-slate-200 px-3 text-sm text-slate-600">
             <span className="sr-only">Filter by listing location text</span>
-            <select aria-label="Filter by listing location text" value={region} onChange={(event) => setRegion(event.target.value as Region)} className="h-full bg-transparent outline-none">
+            <select aria-label="Filter by listing location text" value={region} onChange={(event) => setRegion(event.target.value as Region)} className="h-full min-w-0 max-w-full bg-transparent outline-none">
               <option value="nigeria">Nigeria, Africa-wide, or worldwide</option>
               <option value="africa">Africa or worldwide</option>
               <option value="remote">Remote, verify eligibility</option>
               <option value="all">Any country or location</option>
             </select>
           </label>
-          <label className="flex min-h-11 items-center rounded-lg border border-slate-200 px-3 text-sm text-slate-600">
+          <label className="flex min-h-11 min-w-0 items-center rounded-lg border border-slate-200 px-3 text-sm text-slate-600">
             <span className="sr-only">Filter by skill category</span>
-            <select aria-label="Filter by target work category" value={category} onChange={(event) => setCategory(event.target.value as JobCategory)} className="h-full bg-transparent outline-none">
+            <select aria-label="Filter by target work category" value={category} onChange={(event) => setCategory(event.target.value as JobCategory)} className="h-full min-w-0 max-w-full bg-transparent outline-none">
               {jobCategories.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
             </select>
           </label>

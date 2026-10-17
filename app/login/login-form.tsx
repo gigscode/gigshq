@@ -103,7 +103,7 @@ export function LoginForm({
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#f6f7fb] px-4 py-10">
+    <main className="flex min-h-screen items-center justify-center bg-[#fbfaf7] px-4 py-10">
       <Card className="w-full max-w-lg border-slate-200/80 bg-white shadow-sm">
         <CardHeader className="items-center gap-5 pb-2 text-center">
           <Image src="/gigshqicon.png" alt="" width={56} height={56} className="rounded-xl" />
