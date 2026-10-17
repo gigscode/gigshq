@@ -135,7 +135,7 @@ export async function POST(request: Request) {
     const providerResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: 'Bearer ' + apiKey,
         'Content-Type': 'application/json',
         'X-OpenRouter-Title': 'gigshq',
       },
